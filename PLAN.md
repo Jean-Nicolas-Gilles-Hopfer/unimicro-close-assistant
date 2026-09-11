@@ -68,3 +68,6 @@ Implications:
 - 11 Sept (evening): revision checks computed natively in the plugin via statistics (same figures as Unimicro's
   MCP get_revisioncheck) + two own checks (unmatched payments, VAT returns), with explanations and proposed
   entries; reminder drafting via ai-generate in a drawer. Problem 1-3 all have a first implementation.
+- 12 Sept: repo initialised (personal identity), revision texts in bokmål, all views verified live.
+  Remaining: root README, concept text NO/EN, GitHub publish (personal account via gh auth login),
+  GitHub Pages demo (docs/ with snapshot), video script, optional demo-data seeding.

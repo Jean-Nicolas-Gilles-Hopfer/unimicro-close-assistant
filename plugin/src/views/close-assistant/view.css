@@ -31,3 +31,5 @@ uni-clickable { white-space: nowrap; color: var(--color-primary, #1d4ed8); }
 .grid > uni-card, .wide > uni-card, .kpis > uni-card { display: block; width: 100%; box-sizing: border-box; }
 .grid > uni-card, .wide > uni-card { max-width: none; }
 .kpis > uni-card { height: 100%; }
+.findings, .finding-body { min-width: 0; overflow-wrap: anywhere; }
+.finding-body uni-table { display: block; max-width: 100%; overflow-x: auto; }
