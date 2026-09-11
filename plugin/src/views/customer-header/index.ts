@@ -21,7 +21,7 @@ export default class CustomerHeaderView extends LitElement {
 
     static styles = css`
         :host { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-family); color: var(--text-default); }
-        .muted { color: var(--text-subtle, #6b7280); font-size: 0.85rem; white-space: nowrap; }
+        .muted { color: var(--text-subdued); font-size: 0.85rem; white-space: nowrap; }
     `;
 
     private cp: CounterpartAging | null = null;

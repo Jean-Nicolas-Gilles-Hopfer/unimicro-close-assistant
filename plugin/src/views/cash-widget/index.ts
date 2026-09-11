@@ -22,9 +22,9 @@ export default class CashWidgetView extends LitElement {
         h3 { margin: 0 0 0.5rem; font-size: 1.1rem; font-weight: 600; }
         .rows { display: grid; gap: 0.6rem; padding: 0.5rem 0; }
         .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
-        .label { color: var(--text-subtle, #6b7280); font-size: 0.85rem; }
+        .label { color: var(--text-subdued); font-size: 0.85rem; }
         .value { font-weight: 600; font-size: 1.1rem; white-space: nowrap; }
-        .critical { color: var(--color-critical, #b91c1c); }
+        .critical { color: var(--text-critical); }
         .foot { margin-top: 0.5rem; }
     `;
 
