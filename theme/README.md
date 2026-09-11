@@ -8,7 +8,9 @@ colours, with the page background darker than cards as in the light theme.
 
 - `unimicro-dark.css` – the theme. Load after `base.css`, or wrap in `@media (prefers-color-scheme: dark)`.
 - `check-contrast.mjs` – WCAG check for the text/surface pairs that matter. Run `node theme/check-contrast.mjs`.
-- `preview-dark.png` – the Close Assistant plugin inside Unimicro with the theme injected on the test site.
+- Preview without touching the app: open test.unimicro.no, paste the contents of `unimicro-dark.css` into a
+  `<style>` element via the browser's developer tools (or a user-style extension such as Stylus). The whole
+  application switches, plugin views included.
 
 ## What it does not do
 
