@@ -240,8 +240,17 @@ html[data-uni-theme="dark"] svg[data-uni-fix-icon="link"] {
 }
 
 /* Links: the app hard-codes the brand blue (#2253dd) in many places; lift to the dark-theme link colour. */
-html[data-uni-theme="dark"] a:not([class*="btn"]):not(.tab):not(uni-button a) {
+html[data-uni-theme="dark"] a:not([class*="btn"]):not(.tab):not(uni-button a):not(sidebar-link-list a):not(rig-link a):not(sidebar-section a) {
     color: var(--text-link);
+}
+/* Left-menu sub-links stay in the default text colour, as in the light theme. */
+html[data-uni-theme="dark"] sidebar-link-list a,
+html[data-uni-theme="dark"] rig-link a {
+    color: var(--text-default);
+}
+html[data-uni-theme="dark"] sidebar-link-list a.active,
+html[data-uni-theme="dark"] rig-link a.active {
+    color: var(--text-interactive);
 }
 
 /* Top bar: hamburger and other header icons drawn in navy. */
