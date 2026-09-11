@@ -10,6 +10,16 @@ const report = [
 ];
 
 describe("revision remediation", () => {
+  it("speaks Norwegian when asked, with the same structure", () => {
+    const en = remediate(report, { year: 2026 });
+    const nb = remediate(report, { year: 2026, lang: "nb" });
+    expect(nb.map((r) => r.section)).toEqual(en.map((r) => r.section));
+    expect(nb[0].explanation).toMatch(/Resultatkontoene/);
+    expect(nb[1].explanation).toMatch(/går ikke i null/);
+    expect(nb[2].explanation).toMatch(/aldri er avregnet/);
+    expect(nb[0].proposedEntries[0].title).toMatch(/disponering/);
+    expect(nb[0].proposedEntries[0].lines).toEqual(en[0].proposedEntries[0].lines);
+  });
   it("explains unmatched payments and missing VAT returns", () => {
     const r = remediate([
       { name: "Unmatched customer payments", status: "Warning", findings: [{ status: "Warning", comment: "payments not matched to invoices", accountNumber: 1500, accountName: "Kundefordringer", value: -5274740, reason: "LessThan 0" }] },

@@ -98,7 +98,7 @@ export async function runRevisionChecks(host: UnimicroHost, year: number, unmatc
     const trialBalance: TrialBalanceRow[] = balances.map((r) => ({
         account: `${r.A} - ${r.Name}`, accountNumber: r.A, startBalance: ib.find((i) => i.A === r.A)?.Sum ?? 0, balance: r.Sum ?? 0,
     }));
-    const remediations = remediate(sections, { year, trialBalance, asOf: new Date().toISOString().slice(0, 10) });
+    const remediations = remediate(sections, { year, trialBalance, asOf: new Date().toISOString().slice(0, 10), lang: 'nb' });
     return {
         year, sections, remediations,
         errorCount: remediations.filter((r) => r.severity === 'error').length,
