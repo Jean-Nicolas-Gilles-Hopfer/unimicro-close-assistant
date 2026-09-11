@@ -220,3 +220,72 @@ html[data-uni-theme="dark"] [class*="autocomplete"] input {
     color: var(--text-default) !important;
     border-color: var(--border-input) !important;
 }
+
+/* ---- Sweep targets: set at runtime by the extension on elements that still carry literal colours. ---- */
+html[data-uni-theme="dark"] [data-uni-fix-bg] {
+    background-color: var(--surface-default) !important;
+    background-image: none !important;
+}
+html[data-uni-theme="dark"] [data-uni-fix-fg="text"] {
+    color: var(--text-default) !important;
+}
+html[data-uni-theme="dark"] [data-uni-fix-fg="link"] {
+    color: var(--text-link) !important;
+}
+html[data-uni-theme="dark"] svg[data-uni-fix-icon="icon"] {
+    color: var(--icon-default) !important;
+}
+html[data-uni-theme="dark"] svg[data-uni-fix-icon="link"] {
+    color: var(--icon-interactive) !important;
+}
+
+/* Links: the app hard-codes the brand blue (#2253dd) in many places; lift to the dark-theme link colour. */
+html[data-uni-theme="dark"] a:not([class*="btn"]):not(.tab):not(uni-button a) {
+    color: var(--text-link);
+}
+
+/* Top bar: hamburger and other header icons drawn in navy. */
+html[data-uni-theme="dark"] header svg,
+html[data-uni-theme="dark"] [class*="navbar"] svg,
+html[data-uni-theme="dark"] [class*="topbar"] svg,
+html[data-uni-theme="dark"] [class*="hamburger"] svg {
+    color: var(--icon-default) !important;
+}
+
+/* Angular Material radio: the unselected ring uses a literal in this build. */
+html[data-uni-theme="dark"] .mdc-radio .mdc-radio__outer-circle {
+    border-color: var(--icon-default) !important;
+}
+html[data-uni-theme="dark"] .mdc-radio .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__outer-circle,
+html[data-uni-theme="dark"] .mdc-radio .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__inner-circle {
+    border-color: var(--icon-interactive) !important;
+}
+
+/* Dialogs, drawers and overlays with literal white surfaces (report picker, product-group list, menus). */
+html[data-uni-theme="dark"] .mat-mdc-dialog-surface,
+html[data-uni-theme="dark"] .cdk-overlay-pane,
+html[data-uni-theme="dark"] .cdk-overlay-pane > *,
+html[data-uni-theme="dark"] [class*="dialog"] [class*="content"],
+html[data-uni-theme="dark"] [class*="modal"],
+html[data-uni-theme="dark"] [class*="drawer"],
+html[data-uni-theme="dark"] [class*="tree"],
+html[data-uni-theme="dark"] [class*="list-view"] {
+    background-color: var(--surface-default);
+    color: var(--text-default);
+}
+
+/* Table row highlight (Hovedbok, Kontoplan): selected rows use a saturated blue; use the theme surface. */
+html[data-uni-theme="dark"] .ag-row-selected,
+html[data-uni-theme="dark"] tr.selected,
+html[data-uni-theme="dark"] [class*="row"][class*="selected"],
+html[data-uni-theme="dark"] [class*="row"][class*="active"] {
+    background-color: var(--surface-selected) !important;
+}
+
+/* Micro (AI assistant) surfaces. */
+html[data-uni-theme="dark"] [class*="micro"] [class*="chat"],
+html[data-uni-theme="dark"] [class*="assistant"],
+html[data-uni-theme="dark"] [class*="conversation"] {
+    background-color: var(--surface-default);
+    color: var(--text-default);
+}
