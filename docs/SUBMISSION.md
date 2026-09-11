@@ -27,6 +27,11 @@ sjekker det, og foreslår det balanserte korreksjonsbilaget – på norsk, i rik
 det seg at to feil i åpningsbalansen var ett problem: fjorårets resultat var aldri disponert. To egne kontroller er
 lagt til: umatchede innbetalinger og manglende mva-melding.
 
+*Bonus: mørk modus.* Unimicro har ikke mørk modus, men designsystemet er bygget for det – hver farge er et navngitt
+token. Vi har laget et komplett mørkt tema i samme format som de fire merkevaretemaene (DNB, SpareBank 1, Eika,
+Azets), kontrastsjekket mot WCAG AA, pluss en liten nettleserutvidelse med en lys/mørk-bryter (BETA) som viser
+det live. De få stedene appen bruker hardkodede farger er dokumentert som det Unimicro selv må rette.
+
 Samme logikk er også tilgjengelig som MCP-server, slik at Claude og andre AI-assistenter kan svare på de samme
 spørsmålene i naturlig språk. Alt leses som innlogget bruker; ingenting bokføres uten Unimicros egen bekreftelse.
 
@@ -54,6 +59,11 @@ explicit assumptions and the low point highlighted.
 verify it, and proposes the balanced correcting entry, in Norwegian and in the right order. In the demo company, two
 opening-balance errors turned out to be one problem: last year's result was never allocated. Two checks of our own are
 added: unmatched payments and VAT returns not produced.
+
+*Bonus: dark mode.* Unimicro has no dark mode, but its design system is built for one: every colour is a named
+token. We built a complete dark theme in the same format as the four brand themes (DNB, SpareBank 1, Eika, Azets),
+contrast-checked against WCAG AA, plus a small browser extension with a light/dark switch (BETA) that shows it live.
+The few places where the app hard-codes colours are documented as the work Unimicro would need to do on its side.
 
 The same logic ships as an MCP server, so Claude and other AI assistants can answer the same questions in natural
 language. Everything is read as the signed-in user; nothing is booked without Unimicro's own confirmation step.
