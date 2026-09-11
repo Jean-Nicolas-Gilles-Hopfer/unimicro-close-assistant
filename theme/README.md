@@ -39,8 +39,12 @@ Install (developer mode, no store needed):
 2. Click **Load unpacked** and choose the `theme/extension` folder.
 3. Open test.unimicro.no; a "Dark mode (BETA)" button appears bottom right.
 
-`compat.css` covers the spots where the app hard-codes colours (left menu, icons, Angular Material radio buttons,
-ag-Grid lists, plain tables, tab strips). Chart text drawn on canvas (for example the sum inside the receivables
-donut) cannot be restyled from CSS and stays as is; that one needs a change in the app.
+`compat.css` covers the known spots where the app hard-codes colours (left menu, icons, Angular Material radio
+buttons, ag-Grid lists, tab strips, dialogs). On top of that the extension runs a small sweep after each render:
+any element still painted with a light background, dark text or a dark icon once the theme has applied is marked
+and recoloured with tokens. That is what makes the assistant (Micro), the report picker and other screens we never
+looked at follow along. Chart grid lines and anything else drawn on a canvas cannot be restyled from CSS.
+
+After changing files here, reload the extension on chrome://extensions (the circular arrow on its card) and refresh Unimicro.
 
 Keep `extension/unimicro-dark.css` and `extension/compat.css` in sync with the files in `theme/` (copy them).
