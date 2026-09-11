@@ -1,0 +1,176 @@
+/*
+ * Unimicro Design System – dark theme (proposal)
+ *
+ * Same contract as the supplied brand themes (dnb.css, sb1.css, eika.css, azets.css): declarations on :root
+ * without a cascade layer, overriding the base-theme defaults token for token. Load after base.css:
+ *
+ *   @import '@unimicro/design-system/styles/themes/base.css';
+ *   @import './unimicro-dark.css';
+ *
+ * Or scope it to the user's preference by wrapping the block in
+ *   @media (prefers-color-scheme: dark) { ... }
+ * or to an explicit switch with [data-theme="dark"] instead of :root.
+ *
+ * Design rules used:
+ * - Keep the Unimicro blue family, lifted two steps for contrast on dark surfaces (#2253dd -> #7ea6ff for
+ *   text/links/icons, #3f6fe6 for filled buttons).
+ * - Page background darker than cards, as in the light theme (surface-subdued vs surface-default).
+ * - Semantic surfaces (info/success/warning/critical) are deep tints of their hue; their borders and icons
+ *   stay recognisable against them.
+ * - Every text/surface pair in this file meets WCAG AA (4.5:1) – see check-contrast.mjs.
+ * - Typography, radii, weights and shadows are unchanged except the overlay shadow, which is stronger.
+ *
+ * Built during Unimicro Hackathon 2026 by Jean-Nicolas Gilles Hopfer as a contribution proposal.
+ */
+:root {
+    color-scheme: dark;
+
+    /* Text */
+    --text-default: #e8eaed;
+    --text-subdued: #a6acb3;
+    --text-invert: #14171a;
+    --text-interactive: #7ea6ff;
+    --text-critical: #ff8a82;
+    --text-link: #7ea6ff;
+
+    /* Surfaces */
+    --surface-default: #1b1f24;
+    --surface-subdued: #121518;
+    --surface-readonly: #22272d;
+    --surface-info: #172236;
+    --surface-success: #16301f;
+    --surface-warning: #3a2b10;
+    --surface-critical: #3a1b19;
+    --surface-selected: #1f3057;
+    --surface-hover: #232d3f;
+    --surface-backdrop: rgba(0, 0, 0, 0.6);
+    --surface-sum-primary: #2f4a44;
+    --surface-sum-secondary: #1f2e2b;
+    --surface-sum-tertiary: #172236;
+
+    /* Borders */
+    --border-default: #3a4552;
+    --border-disabled: #2a3037;
+    --border-focus: #7ea6ff;
+    --border-selected: #7ea6ff;
+    --border-input: #3a444f;
+    --border-info: #3b5a8a;
+    --border-success: #2f7a45;
+    --border-warning: #8a6a2a;
+    --border-critical: #8a3f3a;
+    --border-invalid: #ff8a82;
+
+    /* Icons */
+    --icon-default: #b8bec5;
+    --icon-disabled: #5b636b;
+    --icon-interactive: #7ea6ff;
+    --icon-info: #6fa0ea;
+    --icon-success: #5ec27e;
+    --icon-warning: #f0a13a;
+    --icon-critical: #ff8a82;
+    --icon-invert: #14171a;
+
+    /* Buttons */
+    --btn-primary: #3f6fe6;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: #3f6fe6;
+    --btn-primary--hover: #5f89ee;
+    --btn-primary-text--hover: #ffffff;
+    --btn-primary-border--hover: #5f89ee;
+    --btn-secondary: #1b1f24;
+    --btn-secondary-text: #7ea6ff;
+    --btn-secondary-border: #3a444f;
+    --btn-secondary--hover: #232d3f;
+    --btn-secondary-text--hover: #a8c3ff;
+    --btn-secondary-border--hover: #7ea6ff;
+    --btn-tertiary: #7ea6ff;
+    --btn-tertiary--hover: #a8c3ff;
+    --btn-destructive: #c93a31;
+    --btn-destructive-text: #ffffff;
+    --btn-destructive-border: #c93a31;
+    --btn-destructive--hover: #e26e67;
+    --btn-destructive-text--hover: #ffffff;
+    --btn-destructive-border--hover: #e26e67;
+    --icon-btn--hover: #7ea6ff;
+    --split-btn-divider: #14171a;
+    --split-btn-divider--hover: #14171a;
+
+    /* Tooltip */
+    --tooltip-bg: #e8eaed;
+    --tooltip-text: #14171a;
+
+    /* Checkbox, radio, switch */
+    --checkbox-radio-bg: #1b1f24;
+    --checkbox-radio-border: #5b636b;
+    --checkbox-radio-unchecked-hover-bg: #232d3f;
+    --checkbox-radio-unchecked-hover-border: #7ea6ff;
+    --checkbox-checked-bg: #3f6fe6;
+    --checkbox-checked-border: #3f6fe6;
+    --checkbox-checked-icon: #ffffff;
+    --checkbox-checked-hover-bg: #5f89ee;
+    --checkbox-checked-hover-border: #5f89ee;
+    --checkbox-checked-hover-icon: #ffffff;
+    --radio-checked-bg: #1b1f24;
+    --radio-checked-border: #7ea6ff;
+    --radio-checked-dot: #7ea6ff;
+    --switch-background: #2a3037;
+    --switch-active: #3f6fe6;
+
+    /* Tables */
+    --table-header: #232a33;
+    --table-header-text: #e8eaed;
+    --table-row-even: #1b1f24;
+    --table-row-odd: #1b1f24;
+    --table-readonly: #22272d;
+
+    /* Elevation */
+    --overlay-shadow: 2px 4px 16px 0px rgba(0, 0, 0, 0.6);
+
+    /* Decorative */
+    --decorative-one-100: #7fa997;
+    --decorative-one-30: #2b3b35;
+    --decorative-one-10: #1d2622;
+    --decorative-two-100: #93a4c4;
+    --decorative-two-30: #2c3446;
+    --decorative-two-10: #1c212b;
+    --decorative-three-100: #b0a9a3;
+    --decorative-three-30: #3b3630;
+    --decorative-three-10: #262320;
+
+    /* Avatars: the "light" fill becomes a deep tint, the "dark" tone a readable pastel */
+    --avatar-light-ash: #253530;
+    --avatar-dark-ash: #9fc4b8;
+    --avatar-light-blue: #1f3340;
+    --avatar-dark-blue: #8fc0d8;
+    --avatar-light-emerald: #1f3530;
+    --avatar-dark-emerald: #92c4b6;
+    --avatar-light-green: #2a3320;
+    --avatar-dark-green: #c1cf9c;
+    --avatar-light-orange: #3c2b1f;
+    --avatar-dark-orange: #e0b892;
+    --avatar-light-purple: #2c2738;
+    --avatar-dark-purple: #b1a5cf;
+    --avatar-light-red: #3c2620;
+    --avatar-dark-red: #e0bfb2;
+    --avatar-light-yellow: #3a3220;
+    --avatar-dark-yellow: #e6d29c;
+
+    /* Categorical fills for tags and chips: deep tints, same hue order as the base theme */
+    --categorical-1: #1f3b33;
+    --categorical-2: #223250;
+    --categorical-3: #3d2e27;
+    --categorical-4: #3d3620;
+    --categorical-5: #2e2a3e;
+    --categorical-6: #3f2c20;
+    --categorical-7: #33312a;
+    --categorical-8: #2c331f;
+
+    /* Graph series: same hues, lifted for dark backgrounds */
+    --graph-1: #8fb3f0;
+    --graph-2: #b9d99b;
+    --graph-3: #eaa88c;
+    --graph-4: #bfa1ec;
+    --graph-5: #f0d58f;
+    --graph-6: #8aa8d6;
+    --graph-7: #9fc4b8;
+}

@@ -1,0 +1,222 @@
+/*
+ * Companion to unimicro-dark.css: covers the places where the application uses colour literals instead of
+ * design-system tokens, so they follow the dark theme too. Each block names what it fixes and which token the
+ * application should use instead; once the app uses the token, the block becomes redundant.
+ *
+ * Only active together with the dark theme (scoped by html[data-uni-theme="dark"], which the toggle sets).
+ */
+
+/* Left menu: active section background is #dee8fd in the app; should be --surface-selected / --surface-hover. */
+html[data-uni-theme="dark"] sidebar-section button.unstyled[aria-expanded="true"],
+html[data-uni-theme="dark"] sidebar-section button.unstyled.active,
+html[data-uni-theme="dark"] sidebar-link-list a.active,
+html[data-uni-theme="dark"] rig-link a.active {
+    background: var(--surface-selected) !important;
+    color: var(--text-default) !important;
+}
+html[data-uni-theme="dark"] sidebar-section button.unstyled:hover,
+html[data-uni-theme="dark"] sidebar-link-list a:hover {
+    background: var(--surface-hover) !important;
+    color: var(--text-default) !important;
+}
+
+/* Left menu icons: paths use currentColor with color #143361 on the svg; should be --icon-default / --icon-interactive. */
+html[data-uni-theme="dark"] sidebar-section svg,
+html[data-uni-theme="dark"] sidebar-section button.unstyled {
+    color: var(--icon-interactive) !important;
+}
+html[data-uni-theme="dark"] sidebar-section button.unstyled span {
+    color: var(--text-default) !important;
+}
+
+/* Logo: dark wordmark on dark background. Invert to white until a light variant exists. */
+html[data-uni-theme="dark"] header img[alt*="nimicro" i],
+html[data-uni-theme="dark"] .logo img,
+html[data-uni-theme="dark"] a[href="#/"] img {
+    filter: brightness(0) invert(1);
+}
+
+/* Demo banner: fixed yellow. */
+html[data-uni-theme="dark"] [class*="trial"],
+html[data-uni-theme="dark"] [class*="demo-banner"] {
+    background: var(--surface-warning) !important;
+    color: var(--text-default) !important;
+}
+
+/* Angular Material radio buttons and menus (dashboard widgets): label colour is rgba(0,0,0,.87). */
+html[data-uni-theme="dark"] {
+    --mdc-radio-unselected-icon-color: var(--icon-default);
+    --mdc-radio-unselected-hover-icon-color: var(--icon-interactive);
+    --mdc-radio-selected-icon-color: var(--icon-interactive);
+    --mdc-radio-selected-hover-icon-color: var(--icon-interactive);
+    --mdc-radio-selected-focus-icon-color: var(--icon-interactive);
+    --mdc-radio-selected-pressed-icon-color: var(--icon-interactive);
+    --mat-radio-label-text-color: var(--text-default);
+    --mat-radio-checked-ripple-color: var(--icon-interactive);
+    --mat-menu-container-color: var(--surface-default);
+    --mat-menu-item-label-text-color: var(--text-default);
+    --mat-menu-item-icon-color: var(--icon-default);
+    --mat-menu-item-hover-state-layer-color: var(--surface-hover);
+    --mat-tab-header-label-text-color: var(--text-subdued);
+    --mat-tab-header-active-label-text-color: var(--text-interactive);
+    --mat-tab-header-inactive-label-text-color: var(--text-subdued);
+    --mat-tab-header-active-focus-label-text-color: var(--text-interactive);
+    --mat-tab-header-active-hover-label-text-color: var(--text-interactive);
+    --mdc-tab-indicator-active-indicator-color: var(--icon-interactive);
+}
+html[data-uni-theme="dark"] .mat-mdc-radio-button .mdc-label,
+html[data-uni-theme="dark"] .mdc-form-field {
+    color: var(--text-default) !important;
+}
+
+/* ag-Grid lists (invoice list, jobs, journal): the theme variables exist but are set to light literals. */
+html[data-uni-theme="dark"] .ag-theme-alpine,
+html[data-uni-theme="dark"] .ag-theme-material,
+html[data-uni-theme="dark"] .ag-theme-balham,
+html[data-uni-theme="dark"] .ag-theme-quartz,
+html[data-uni-theme="dark"] [class^="ag-theme"] {
+    --ag-background-color: var(--surface-default);
+    --ag-foreground-color: var(--text-default);
+    --ag-secondary-foreground-color: var(--text-subdued);
+    --ag-header-background-color: var(--table-header);
+    --ag-header-foreground-color: var(--table-header-text);
+    --ag-odd-row-background-color: var(--table-row-odd);
+    --ag-row-hover-color: var(--surface-hover);
+    --ag-selected-row-background-color: var(--surface-selected);
+    --ag-border-color: var(--border-default);
+    --ag-row-border-color: var(--border-default);
+    --ag-control-panel-background-color: var(--surface-subdued);
+    --ag-input-border-color: var(--border-input);
+    --ag-disabled-foreground-color: var(--icon-disabled);
+    --ag-header-column-separator-color: var(--border-default);
+    --ag-icon-font-color: var(--icon-default);
+    --ag-modal-overlay-background-color: var(--surface-backdrop);
+    color: var(--text-default);
+}
+
+/* Plain HTML tables and tab strips that hard-code white (invoice lines, "Detaljer" tabs, job lists). */
+html[data-uni-theme="dark"] table,
+html[data-uni-theme="dark"] thead,
+html[data-uni-theme="dark"] tbody,
+html[data-uni-theme="dark"] tr,
+html[data-uni-theme="dark"] td,
+html[data-uni-theme="dark"] th {
+    background-color: transparent;
+    color: var(--text-default);
+    border-color: var(--border-default);
+}
+html[data-uni-theme="dark"] thead th,
+html[data-uni-theme="dark"] [class*="table-header"],
+html[data-uni-theme="dark"] [class*="tab-strip"],
+html[data-uni-theme="dark"] [class*="tabs-header"],
+html[data-uni-theme="dark"] [role="tablist"] {
+    background-color: var(--table-header) !important;
+    color: var(--table-header-text) !important;
+}
+html[data-uni-theme="dark"] [role="tab"] {
+    color: var(--text-subdued) !important;
+}
+html[data-uni-theme="dark"] [role="tab"][aria-selected="true"] {
+    color: var(--text-interactive) !important;
+}
+
+/* Generic white-background containers that ignore tokens: cards, panels, dropdowns. */
+html[data-uni-theme="dark"] [style*="background: white"],
+html[data-uni-theme="dark"] [style*="background-color: white"],
+html[data-uni-theme="dark"] [style*="background: #fff"],
+html[data-uni-theme="dark"] [style*="background-color: #fff"],
+html[data-uni-theme="dark"] [style*="rgb(255, 255, 255)"] {
+    background-color: var(--surface-default) !important;
+    color: var(--text-default) !important;
+}
+
+/* Form controls: native inputs and selects take the dark colour scheme. */
+html[data-uni-theme="dark"] input,
+html[data-uni-theme="dark"] select,
+html[data-uni-theme="dark"] textarea {
+    color-scheme: dark;
+}
+
+/* Illustrations are drawn for light backgrounds; soften them slightly rather than recolour. */
+html[data-uni-theme="dark"] uni-illustration,
+html[data-uni-theme="dark"] img[src*="illustration" i] {
+    filter: brightness(0.9);
+}
+
+/* uni-tabs (invoice/order/customer detail pages): strip is #e7ecf3 with #143361 text. */
+html[data-uni-theme="dark"] uni-tabs,
+html[data-uni-theme="dark"] uni-tabs .tab-container {
+    background: var(--table-header) !important;
+}
+html[data-uni-theme="dark"] uni-tabs a.tab,
+html[data-uni-theme="dark"] uni-tabs a.tab uni-tab-content,
+html[data-uni-theme="dark"] uni-tabs a.tab span {
+    color: var(--text-subdued) !important;
+}
+html[data-uni-theme="dark"] uni-tabs a.tab.active,
+html[data-uni-theme="dark"] uni-tabs a.tab.active uni-tab-content,
+html[data-uni-theme="dark"] uni-tabs a.tab.active span {
+    color: var(--text-interactive) !important;
+    background: var(--surface-default) !important;
+}
+
+/* ag-Grid rows and headers use literals (#fff) rather than the ag variables in this build. */
+html[data-uni-theme="dark"] .ag-root-wrapper,
+html[data-uni-theme="dark"] .ag-root,
+html[data-uni-theme="dark"] .ag-body-viewport,
+html[data-uni-theme="dark"] .ag-center-cols-viewport,
+html[data-uni-theme="dark"] .ag-center-cols-container,
+html[data-uni-theme="dark"] .ag-pinned-right-cols-container,
+html[data-uni-theme="dark"] .ag-pinned-left-cols-container,
+html[data-uni-theme="dark"] .ag-row,
+html[data-uni-theme="dark"] .ag-row-odd,
+html[data-uni-theme="dark"] .ag-row-even,
+html[data-uni-theme="dark"] .ag-paging-panel,
+html[data-uni-theme="dark"] .ag-status-bar,
+html[data-uni-theme="dark"] .ag-floating-bottom,
+html[data-uni-theme="dark"] .ag-floating-bottom-container {
+    background-color: var(--surface-default) !important;
+    color: var(--text-default) !important;
+    border-color: var(--border-default) !important;
+}
+html[data-uni-theme="dark"] .ag-row-hover,
+html[data-uni-theme="dark"] .ag-row:hover {
+    background-color: var(--surface-hover) !important;
+}
+html[data-uni-theme="dark"] .ag-row-selected {
+    background-color: var(--surface-selected) !important;
+}
+html[data-uni-theme="dark"] .ag-header,
+html[data-uni-theme="dark"] .ag-header-viewport,
+html[data-uni-theme="dark"] .ag-header-container,
+html[data-uni-theme="dark"] .ag-header-row,
+html[data-uni-theme="dark"] .ag-header-cell,
+html[data-uni-theme="dark"] .ag-pinned-right-header,
+html[data-uni-theme="dark"] .ag-pinned-left-header {
+    background-color: var(--table-header) !important;
+    color: var(--table-header-text) !important;
+    border-color: var(--border-default) !important;
+}
+html[data-uni-theme="dark"] .ag-cell,
+html[data-uni-theme="dark"] .ag-cell-value,
+html[data-uni-theme="dark"] .ag-header-cell-text,
+html[data-uni-theme="dark"] .ag-icon {
+    color: inherit !important;
+}
+html[data-uni-theme="dark"] .ag-cell a {
+    color: var(--text-link) !important;
+}
+
+/* Remaining ag-Grid row variants (pinned, last/new-line row) and text inputs styled with literal white. */
+html[data-uni-theme="dark"] div[class*="ag-row"],
+html[data-uni-theme="dark"] .ag-pinned-right-cols-container .ag-row,
+html[data-uni-theme="dark"] .ag-full-width-container .ag-row {
+    background-color: var(--surface-default) !important;
+}
+html[data-uni-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html[data-uni-theme="dark"] .search-input,
+html[data-uni-theme="dark"] [class*="autocomplete"] input {
+    background-color: var(--surface-default) !important;
+    color: var(--text-default) !important;
+    border-color: var(--border-input) !important;
+}

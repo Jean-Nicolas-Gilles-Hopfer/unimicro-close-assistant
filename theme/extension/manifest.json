@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Unimicro Dark Mode (BETA)",
+  "version": "0.1.0",
+  "description": "Adds a dark theme to Unimicro using the design system's own colour tokens, with a light/dark switch. Unofficial preview built during Unimicro Hackathon 2026.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://test.unimicro.no/*", "https://app.unimicro.no/*", "https://*.unimicro.no/*"],
+      "js": ["toggle.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["unimicro-dark.css", "compat.css"], "matches": ["https://*.unimicro.no/*"] }
+  ]
+}
