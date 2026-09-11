@@ -1,0 +1,82 @@
+{
+  "$schema": "https://developer-api.unimicro.no/schemas/manifest.json",
+  "manifestVersion": 1,
+  "apiVersion": "1.0",
+  "id": "close-assistant",
+  "version": "0.1.0",
+  "name": "Close Assistant",
+  "views": [
+    {
+      "id": "close-assistant",
+      "model": "native",
+      "shape": "page",
+      "entry": "./dist/views/close-assistant/index.js",
+      "slug": "close-assistant",
+      "menu": {
+        "label": "Close Assistant"
+      },
+      "placement": {
+        "appfrontend": {
+          "module": "sales",
+          "menu": {
+            "section": "common_sales"
+          }
+        }
+      }
+    },
+    {
+      "id": "cash-widget",
+      "model": "native",
+      "shape": "slot",
+      "entry": "./dist/views/cash-widget/index.js",
+      "placement": {
+        "appfrontend": {
+          "slot": "dashboard.widget"
+        }
+      }
+    },
+    {
+      "id": "invoice-header",
+      "model": "native",
+      "shape": "slot",
+      "entry": "./dist/views/invoice-header/index.js",
+      "placement": {
+        "appfrontend": {
+          "slot": "sales.invoice.details:header"
+        }
+      }
+    },
+    {
+      "id": "customer-header",
+      "model": "native",
+      "shape": "slot",
+      "entry": "./dist/views/customer-header/index.js",
+      "placement": {
+        "appfrontend": {
+          "slot": "sales.customer.details:header"
+        }
+      }
+    },
+    {
+      "id": "overdue-column",
+      "model": "native",
+      "shape": "column",
+      "entry": "./dist/views/overdue-column/index.js",
+      "column": {
+        "label": "Forfalt",
+        "fields": [
+          "PaymentDueDate",
+          "RestAmount",
+          "StatusCode"
+        ],
+        "sortField": "PaymentDueDate",
+        "width": "180px"
+      },
+      "placement": {
+        "appfrontend": {
+          "slot": "sales.invoice.list:column"
+        }
+      }
+    }
+  ]
+}

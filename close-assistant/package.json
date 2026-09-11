@@ -1,0 +1,25 @@
+{
+  "name": "unimicro-close-assistant",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Month-end close assistant for Unimicro: receivables aging, cash-flow forecast and revision-check remediation, exposed as an MCP server.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "login": "tsx src/cli.ts login",
+    "cli": "tsx src/cli.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

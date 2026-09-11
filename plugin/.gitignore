@@ -1,0 +1,8 @@
+node_modules/
+dist/
+
+# Local CLI state is never committed, except the view stubs `unimicro plugin add view` copies from:
+# a fresh clone has to be able to add a view. The contents are excluded rather than the directory
+# itself, because git will not re-include anything under an excluded directory.
+.unimicro/*
+!.unimicro/view-templates/

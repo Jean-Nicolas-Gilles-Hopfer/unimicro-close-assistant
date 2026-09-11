@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* A class field must assign, not define. Lit generates an accessor on the prototype for every
+       reactive property, and a field declared with define semantics — the default from ES2022 on —
+       installs an own property over it, so the accessor never runs and the view silently stops
+       updating. With this off, `companyName = ''` compiles to an assignment through the accessor,
+       which is what a reactive property expects. Vite reads this too, so the dev server, the build
+       and vitest all agree. */
+    "useDefineForClassFields": false,
+
+    "types": ["vite/client", "node"]
+  },
+
+  /* `npm run check` reads this, and its job is to cover every TypeScript file in the project, so
+     nothing is left to be checked only by being run. That includes the view stubs under
+     .unimicro/view-templates, which `unimicro plugin add view` copies verbatim into src: a mistake
+     left in one of those is copied into a view rather than found in it, and the build never reads
+     them, so nothing else would ever look. They hold __VIEW_CLASS__ and __VIEW_TITLE__ placeholders
+     and still compile — the first is a valid identifier and the second only ever appears inside a
+     template literal. */
+  "include": ["src", "vite.config.ts", "vitest.config.ts", ".unimicro/view-templates"]
+}

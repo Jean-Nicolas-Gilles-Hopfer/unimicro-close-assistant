@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer-api.unimicro.no/schemas/unimicro.config.json",
+  "build": {
+    "command": "npm run build",
+    "outDir": "dist"
+  },
+  "dev": {
+    "mode": "proxy",
+    "command": "npm run dev",
+    "url": "http://localhost:6076",
+    "watch": [
+      "src",
+      "manifest.json"
+    ],
+    "entryMap": {
+      "^dist/views/(.+)/index\\.js$": "src/views/$1/index.ts"
+    }
+  },
+  "serve": {
+    "roots": [
+      "dist"
+    ]
+  },
+  "artifact": {
+    "include": [
+      "dist/**"
+    ],
+    "exclude": [
+      "**/*.map"
+    ]
+  },
+  "lane": "test"
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.tokens.json
+.unimicro-token.json
+*.zip
+.DS_Store
+Thumbs.db

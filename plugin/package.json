@@ -1,0 +1,24 @@
+{
+  "name": "close-assistant",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@unimicro/design-system": "~0.1.0-next.7",
+    "lit": "3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@unimicro/platform-types": "~0.1.2",
+    "@unimicro/plugin-types": "~0.1.5",
+    "happy-dom": "~20.11.6",
+    "typescript": "^5.9.0",
+    "vite": "^8.1.0",
+    "vitest": "~4.1.11"
+  }
+}

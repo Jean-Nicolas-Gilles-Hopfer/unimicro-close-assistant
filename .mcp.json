@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "unimicro": {
+      "type": "http",
+      "url": "https://test-mcp.unimicro.app/mcp"
+    }
+  }
+}
