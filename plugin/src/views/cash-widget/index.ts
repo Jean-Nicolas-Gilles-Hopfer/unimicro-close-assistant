@@ -66,7 +66,7 @@ export default class CashWidgetView extends LitElement {
                 <div class="row"><span class="label">Saldo om 13 uker</span><span class="value">${nok(f.endClosing)}</span></div>
             </div>
             <div class="foot">
-                <uni-button small variant="secondary" @click=${() => void this.host.navigation.navigateTo('/plugins/sales/close-assistant/close-assistant')}>Åpne Close Assistant</uni-button>
+                <uni-button small variant="secondary" @click=${() => void this.host.navigation.navigateTo('/plugins/sales/close-assistant-app/close-assistant')}>Åpne Close Assistant</uni-button>
             </div>
             ${nothing}
         `;

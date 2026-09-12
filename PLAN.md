@@ -71,3 +71,7 @@ Implications:
 - 12 Sept: repo initialised (personal identity), revision texts in bokmål, all views verified live.
   Remaining: root README, concept text NO/EN, GitHub publish (personal account via gh auth login),
   GitHub Pages demo (docs/ with snapshot), video script, optional demo-data seeding.
+- 12 Sept: migrated to the personal GitHub developer account. New contract 1884, demo company "DEMO JN's company"
+  (26d93f12-e3a2-40f5-9cb6-123e1fab5594), application "Close Assistant" (927cf365-e9ab-428e-842c-3793ed0f5761),
+  plugin id close-assistant-app (old id is reserved by the old contract). Dashboard widget must be re-added in the
+  new company; Unimicro MCP product must be activated there; Slack thread needs the new application details.
