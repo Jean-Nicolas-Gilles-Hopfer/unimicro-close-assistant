@@ -72,7 +72,7 @@ language. Everything is read as the signed-in user; nothing is booked without Un
 
 - Repository (public from submission day): https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant
 - Demo page (GitHub Pages, to be published): screenshots, the video and a snapshot-driven walkthrough.
-- Live plugin: runs in test company "DEMO Jean-Nicolas Gilles Hopfer's company" via the dev tunnel; Unimicro staff
+- Live plugin: runs in test company "DEMO JN's company" via the dev tunnel; Unimicro staff
   with access to the contract can open the tunnel link on request.
 
 ## Video script (under 60 seconds, landscape)
