@@ -101,6 +101,28 @@ export async function fetchMonthlyOpex(rest: UnimicroRest, year: number): Promis
   return { average, months };
 }
 
+/** Output VAT booked on 2700-2709 and the number of VAT returns produced for the year (our own check). */
+export async function fetchVatStatus(rest: UnimicroRest, year: number): Promise<{ outputVat: number; returns: number }> {
+  const [bal, reports] = await Promise.all([
+    rest.statistics<{ Sum: number | null }>({
+      model: "JournalEntryLine", select: "sum(Amount) as Sum", expand: "Account",
+      filter: `Account.AccountNumber ge 2700 and Account.AccountNumber le 2709 and FinancialDate le '${year}-12-31'`,
+    }),
+    rest.statistics<{ N: number }>({ model: "VatReport", select: "count(ID) as N", expand: "TerminPeriod", filter: `TerminPeriod.AccountYear eq ${year}` }).catch(() => [{ N: -1 }]),
+  ]);
+  return { outputVat: bal[0]?.Sum ?? 0, returns: reports[0]?.N ?? -1 };
+}
+
+/** Unimicro's built-in text generation (ai-generate), switched on for the test environment on 2026-09-09. */
+export async function generateText(rest: UnimicroRest, prompt: string): Promise<string> {
+  const res = await rest.post<{ choices?: { message?: { content?: string } }[] }>("api/biz/ai-generate?action=generate-text", {
+    Prompt: prompt, Temperature: 60, TopPercentage: 95,
+  });
+  const text = res?.choices?.[0]?.message?.content?.trim();
+  if (!text) throw new Error("ai-generate returned no text");
+  return text;
+}
+
 /** Trial balance rows via Unimicro MCP (already available there). */
 export async function fetchTrialBalance(mcp: UnimicroMcp, companyKey: string, year: number, month = 12): Promise<TrialBalanceRow[]> {
   const p = UnimicroMcp.payload(await mcp.call("get_trial_balance", { companyKey, year, month }));

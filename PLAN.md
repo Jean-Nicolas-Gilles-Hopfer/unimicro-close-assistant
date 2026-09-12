@@ -75,3 +75,7 @@ Implications:
   (26d93f12-e3a2-40f5-9cb6-123e1fab5594), application "Close Assistant" (927cf365-e9ab-428e-842c-3793ed0f5761),
   plugin id close-assistant-app (old id is reserved by the old contract). Dashboard widget must be re-added in the
   new company; Unimicro MCP product must be activated there; Slack thread needs the new application details.
+- 12 Sept (later): docs/ demo page built (static, reads docs/data/snapshot.json exported from the live tools; theme-aware,
+  shows KPIs, aging, chase list, revision remediations, forecast, AI-drafted reminder). Server tools extended:
+  toChaseCount, useAi reminders via ai-generate, revision tool now includes the two own checks. Waiting on: screenshots
+  for docs/img (see docs/img/README.txt), the video, GitHub Pages enablement when the repo goes public.

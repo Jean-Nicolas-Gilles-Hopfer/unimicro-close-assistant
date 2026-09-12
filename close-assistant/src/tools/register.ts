@@ -8,7 +8,8 @@ import { NeedsLoginError } from "../unimicro/auth.js";
 import { buildAging, applyCreditsFifo, suggestDunningStep, BUCKET_LABELS, type CounterpartAging } from "../domain/aging.js";
 import { buildForecast } from "../domain/forecast.js";
 import { remediate, entriesBalance, type DraftLine } from "../domain/revision.js";
-import { fetchOpenReceivables, fetchOpenPayables, fetchBankBalance, fetchMonthlyOpex, fetchTrialBalance, fetchRevisionReport, fetchUnappliedCredits } from "../services/ledger.js";
+import { fetchOpenReceivables, fetchOpenPayables, fetchBankBalance, fetchMonthlyOpex, fetchTrialBalance, fetchRevisionReport, fetchUnappliedCredits, fetchVatStatus, generateText } from "../services/ledger.js";
+import type { RevisionSection } from "../domain/revision.js";
 
 /** Open receivables together with unmatched customer credits, as one aging report. */
 async function agingFor(r: UnimicroRest, asOf: string) {
@@ -44,6 +45,25 @@ function reminderText(cp: CounterpartAging, step: string, companyName: string): 
     default:
       return "";
   }
+}
+
+const STEP_INSTRUCTION: Record<string, string> = {
+  none: "Skriv en kort, hyggelig melding som bekrefter at alt er i orden.",
+  friendly_reminder: "Skriv en vennlig betalingspåminnelse. Ingen gebyr, ingen trusler. Be kunden se bort fra meldingen om betaling allerede er sendt.",
+  reminder_with_fee: "Skriv en formell purring (2. varsel). Nevn at purregebyr etter inkassoforskriften kan tilkomme, og gi 14 dagers betalingsfrist.",
+  debt_collection_notice: "Skriv et inkassovarsel etter inkassoloven § 9: saklig tone, 14 dagers frist, og at kravet sendes til inkasso med ytterligere omkostninger dersom det ikke betales.",
+  send_to_collection: "Skriv et kort internt notat til regnskapsfører som anbefaler å overføre kravet til inkassobyrå, med begrunnelse.",
+};
+
+function reminderPrompt(cp: CounterpartAging, step: string, senderName: string): string {
+  const invoices = cp.invoices.filter((i) => i.daysOverdue > 0).slice(0, 8).map((i) => `- Faktura ${i.invoiceNumber}, forfalt ${i.dueDate} (${i.daysOverdue} dager), utestående ${i.restAmount.toFixed(2)} kr`).join("\n");
+  const credits = cp.credits < 0 ? `\nKunden har også ${(-cp.credits).toFixed(2)} kr i innbetalinger som ikke er koblet til faktura; reelt forfalt beløp er ${cp.netOverdue.toFixed(2)} kr. Bruk det reelle beløpet.` : "";
+  return `Du er regnskapsmedarbeider hos ${senderName}. ${STEP_INSTRUCTION[step] ?? STEP_INSTRUCTION.none}
+Skriv på norsk (bokmål), maks 120 ord, uten emnefelt, uten plassholdere i klammer. Avslutt med "Med vennlig hilsen ${senderName}".
+Kunde: ${cp.counterpartName}
+Forfalte fakturaer:
+${invoices}
+Totalt forfalt: ${cp.overdue.toFixed(2)} kr${credits}`;
 }
 
 export type ToolHandler = (args: Record<string, unknown>) => Promise<unknown>;
@@ -87,19 +107,19 @@ function defineTools(def: Def): void {
     try {
       const report = await agingFor(rest(companyKey), asOf ?? today());
       const customers = report.counterparts.slice(0, topCustomers).map((c) => ({ ...c, invoices: undefined, suggestedStep: suggestDunningStep(c) }));
-      return ok({ ...report, bucketLabels: BUCKET_LABELS, counterparts: customers, customerCount: report.counterparts.length });
+      return ok({ ...report, bucketLabels: BUCKET_LABELS, counterparts: customers, customerCount: report.counterparts.length, toChaseCount: report.counterparts.filter((c) => c.netOverdue > 0).length });
     } catch (e) { return fail(e); }
   });
 
   def("draft_payment_reminders", {
     title: "Draft payment reminders",
     description: "Drafts Norwegian reminder texts (vennlig påminnelse, purring, inkassovarsel) for the customers that need chasing, chosen from their oldest overdue invoice. Nothing is sent; texts are returned for review.",
-    inputSchema: { companyKey: companyKeyArg, asOf: z.string().optional(), customerId: z.number().int().optional(), maxCustomers: z.number().int().min(1).max(50).optional().default(10), senderName: z.string().optional().default("Regnskapsavdelingen") },
-  }, async ({ companyKey, asOf, customerId, maxCustomers, senderName }) => {
+    inputSchema: { companyKey: companyKeyArg, asOf: z.string().optional(), customerId: z.number().int().optional(), maxCustomers: z.number().int().min(1).max(50).optional().default(10), senderName: z.string().optional().default("Regnskapsavdelingen"), useAi: z.boolean().optional().default(false).describe("Draft with Unimicro's built-in text generation (ai-generate) instead of the fixed templates") },
+  }, async ({ companyKey, asOf, customerId, maxCustomers, senderName, useAi }) => {
     try {
       const report = await agingFor(rest(companyKey), asOf ?? today());
       const targets = report.counterparts.filter((c) => c.netOverdue > 0 && (!customerId || c.counterpartId === customerId)).slice(0, maxCustomers);
-      const drafts = targets.map((c) => { const s = suggestDunningStep(c); return { customerId: c.counterpartId, customer: c.counterpartName, email: c.invoices.find((i) => i.emailAddress)?.emailAddress, overdue: c.overdue, unmatchedCredits: c.credits, netOverdue: c.netOverdue, oldestDaysOverdue: c.oldestDaysOverdue, step: s.step, rationale: s.rationale, text: reminderText(c, s.step, senderName) }; });
+      const drafts = await Promise.all(targets.map(async (c) => { const s = suggestDunningStep(c); let text = reminderText(c, s.step, senderName); let source = "template"; if (useAi) { try { text = await generateText(rest(companyKey), reminderPrompt(c, s.step, senderName)); source = "ai-generate"; } catch { /* keep the template */ } } return { customerId: c.counterpartId, customer: c.counterpartName, email: c.invoices.find((i) => i.emailAddress)?.emailAddress, overdue: c.overdue, unmatchedCredits: c.credits, netOverdue: c.netOverdue, oldestDaysOverdue: c.oldestDaysOverdue, step: s.step, rationale: s.rationale, source, text }; }));
       return ok({ asOf: report.asOf, count: drafts.length, drafts });
     } catch (e) { return fail(e); }
   });
@@ -127,9 +147,15 @@ function defineTools(def: Def): void {
   }, async ({ companyKey, year }) => {
     try {
       const ck = companyKey ?? config.companyKey; const y = year ?? new Date().getFullYear();
-      const [rev, tb] = await Promise.all([fetchRevisionReport(mcp, ck, y), fetchTrialBalance(mcp, ck, y).catch(() => [])]);
-      const remediations = remediate(rev.sections, { year: y, trialBalance: tb, asOf: today() });
-      return ok({ year: y, errorCount: rev.errorCount, warningCount: rev.warningCount, remediations, note: "Use book_correcting_entry to book a proposed entry after an accountant has approved it." });
+      const r = rest(ck);
+      const [rev, tb, credits, vat] = await Promise.all([fetchRevisionReport(mcp, ck, y), fetchTrialBalance(mcp, ck, y).catch(() => []), fetchUnappliedCredits(r).catch(() => new Map<number, number>()), fetchVatStatus(r, y).catch(() => ({ outputVat: 0, returns: -1 }))]);
+      const unmatched = [...credits.values()].reduce((a, b) => a + b, 0);
+      const extra: RevisionSection[] = [
+        { name: "Unmatched customer payments", status: unmatched < -0.5 ? "Warning" : "Ok", findings: unmatched < -0.5 ? [{ status: "Warning", comment: "payments not matched to invoices", accountNumber: 1500, accountName: "Kundefordringer", value: Math.round(unmatched * 100) / 100, reason: "LessThan 0" }] : [] },
+        { name: "VAT returns", status: vat.returns === 0 && Math.abs(vat.outputVat) > 0.5 ? "Warning" : "Ok", findings: vat.returns === 0 && Math.abs(vat.outputVat) > 0.5 ? [{ status: "Warning", comment: `no VAT return exists for ${y}`, accountNumber: 2700, accountName: "Utgående merverdiavgift", value: Math.round(vat.outputVat * 100) / 100, reason: "Equals 0 returns" }] : [] },
+      ];
+      const remediations = remediate([...rev.sections, ...extra], { year: y, trialBalance: tb, asOf: today() });
+      return ok({ year: y, errorCount: remediations.filter((x) => x.severity === "error").length, warningCount: remediations.filter((x) => x.severity === "warning").length, remediations, note: "Use book_correcting_entry to book a proposed entry after an accountant has approved it." });
     } catch (e) { return fail(e); }
   });
 

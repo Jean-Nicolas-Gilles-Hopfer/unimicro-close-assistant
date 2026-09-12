@@ -1,5 +1,5 @@
 {
- "capturedAt": "2026-09-12T11:46:53.029Z",
+ "capturedAt": "2026-09-12T11:54:50.966Z",
  "company": "DEMO JN's company (Unimicro test)",
  "aging": {
   "asOf": "2026-09-12",
@@ -257,7 +257,8 @@
    "d61_90": "61-90 days",
    "d90plus": "90+ days"
   },
-  "customerCount": 143
+  "customerCount": 143,
+  "toChaseCount": 82
  },
  "forecast": {
   "asOf": "2026-09-12",
@@ -437,7 +438,7 @@
  "revision": {
   "year": 2026,
   "errorCount": 2,
-  "warningCount": 1,
+  "warningCount": 3,
   "remediations": [
    {
     "section": "Income statement opening balance",
@@ -535,13 +536,72 @@
      }
     ],
     "requiresAccountantJudgement": true
+   },
+   {
+    "section": "Unmatched customer payments",
+    "severity": "warning",
+    "finding": {
+     "status": "Warning",
+     "comment": "payments not matched to invoices",
+     "accountNumber": 1500,
+     "accountName": "Kundefordringer",
+     "value": -5274740,
+     "reason": "LessThan 0"
+    },
+    "explanation": "5 274 740,00 kr of customer payments and credit notes sit on the receivables ledger without being matched to an invoice (payments not matched to invoices). Open invoices therefore look 5 274 740,00 kr too high, reminders may go to customers who have already paid, and the aging report overstates what is overdue.",
+    "likelyCauses": [
+     "Bank payments imported and posted to the customer but never matched (KID missing or amount differs).",
+     "Credit notes issued without being applied to the original invoice.",
+     "Payments registered manually on the customer instead of on the invoice."
+    ],
+    "diagnostics": [
+     "Sales → Kunder → customer → Åpne poster: lines with a negative rest amount are the unmatched payments.",
+     "Regnskap → Åpne poster: use 'Match' to pair payments with invoices, oldest first."
+    ],
+    "proposedEntries": [
+     {
+      "title": "Match payments to invoices (no journal entry needed)",
+      "lines": [],
+      "caution": "Matching changes no balances, only which invoices count as paid. Do it before sending any reminders."
+     }
+    ],
+    "requiresAccountantJudgement": false
+   },
+   {
+    "section": "VAT returns",
+    "severity": "warning",
+    "finding": {
+     "status": "Warning",
+     "comment": "no VAT return exists for 2026",
+     "accountNumber": 2700,
+     "accountName": "Utgående merverdiavgift",
+     "value": -4743350,
+     "reason": "Equals 0 returns"
+    },
+    "explanation": "Output VAT 4 743 350,00 kr is booked on the 2700-series accounts but no VAT return exists for 2026. Until the VAT return (mva-melding) is created and approved for each two-month term, the VAT accounts are never settled against 2740 and the liability to Skatteetaten is not visible.",
+    "likelyCauses": [
+     "VAT returns were never produced in this company (typical for demo or freshly migrated companies).",
+     "Terms were produced but not approved/booked."
+    ],
+    "diagnostics": [
+     "Regnskap → Mva-melding: list of terms and their status for the year.",
+     "Balance on 2740 Oppgjørskonto merverdiavgift should move at each term."
+    ],
+    "proposedEntries": [
+     {
+      "title": "Create and approve the VAT return for each open term",
+      "lines": [],
+      "caution": "Never post VAT settlement manually; the mva-melding function books 2700/2710 against 2740 and files to Altinn."
+     }
+    ],
+    "requiresAccountantJudgement": true
    }
   ],
   "note": "Use book_correcting_entry to book a proposed entry after an accountant has approved it."
  },
  "reminders": {
   "asOf": "2026-09-12",
-  "count": 3,
+  "count": 2,
   "drafts": [
    {
     "customerId": 79,
@@ -552,7 +612,8 @@
     "oldestDaysOverdue": 1112,
     "step": "send_to_collection",
     "rationale": "Oldest invoice 1112 days overdue and past the inkassovarsel window; hand over to collection.",
-    "text": "Internt notat: Lofoten Anlegg ASA har krav 84187.50 NOK som er 1112 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10295, forfalt 2023-08-27, utestående 11892.50 NOK\n  - Faktura 10300, forfalt 2023-08-29, utestående 2362.50 NOK\n  - Faktura 10301, forfalt 2023-08-29, utestående 7235.00 NOK\n  - Faktura 10360, forfalt 2023-10-19, utestående 21712.50 NOK\n  - Faktura 10634, forfalt 2024-05-13, utestående 8875.00 NOK\n  - Faktura 10676, forfalt 2024-06-12, utestående 8875.00 NOK\n  - Faktura 10719, forfalt 2024-07-12, utestående 8875.00 NOK\n  - Faktura 10754, forfalt 2024-08-04, utestående 14360.00 NOK"
+    "source": "ai-generate",
+    "text": "Jeg anbefaler at kravet mot Lofoten Anlegg ASA overføres til inkassobyrå. Kunden har flere svært gamle forfalte fakturaer, hvor eldste restanse er over tre år. Totalt utestående etter hensyntatt ikke-matchede innbetalinger er 65 705,00 kroner. Vi har allerede sendt purringer uten å oppnå full betaling, og betalingsviljen fremstår som lav. For å sikre videre inndrivelse og ivareta våre interesser bør saken nå håndteres av profesjonell inkassoaktør.\n\nMed vennlig hilsen DEMO JN AS"
    },
    {
     "customerId": 115,
@@ -563,18 +624,8 @@
     "oldestDaysOverdue": 837,
     "step": "send_to_collection",
     "rationale": "Oldest invoice 837 days overdue and past the inkassovarsel window; hand over to collection.",
-    "text": "Internt notat: Roar Brekke har krav 78537.50 NOK som er 837 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10646, forfalt 2024-05-28, utestående 5235.00 NOK\n  - Faktura 10650, forfalt 2024-05-29, utestående 8617.50 NOK\n  - Faktura 10655, forfalt 2024-05-30, utestående 7837.50 NOK\n  - Faktura 11222, forfalt 2025-07-08, utestående 4170.00 NOK\n  - Faktura 11483, forfalt 2026-04-04, utestående 14625.00 NOK\n  - Faktura 11498, forfalt 2026-04-23, utestående 8802.50 NOK\n  - Faktura 11509, forfalt 2026-05-04, utestående 14625.00 NOK\n  - Faktura 11537, forfalt 2026-06-03, utestående 14625.00 NOK"
-   },
-   {
-    "customerId": 66,
-    "customer": "Susanne Eriksen",
-    "overdue": 57095,
-    "unmatchedCredits": -1322.5,
-    "netOverdue": 55772.5,
-    "oldestDaysOverdue": 1207,
-    "step": "send_to_collection",
-    "rationale": "Oldest invoice 1207 days overdue and past the inkassovarsel window; hand over to collection.",
-    "text": "Internt notat: Susanne Eriksen har krav 57095.00 NOK som er 1207 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10218, forfalt 2023-05-24, utestående 5735.00 NOK\n  - Faktura 11311, forfalt 2025-10-03, utestående 13125.00 NOK\n  - Faktura 11342, forfalt 2025-11-02, utestående 13125.00 NOK\n  - Faktura 11354, forfalt 2025-11-17, utestående 11985.00 NOK\n  - Faktura 11371, forfalt 2025-12-02, utestående 13125.00 NOK"
+    "source": "ai-generate",
+    "text": "Jeg anbefaler at kundefordringen mot Roar Brekke overføres til inkassobyrå. Kunden har flere sterkt forfalte fakturaer, hvor de eldste er over to år gamle. Totalt reelt forfalt beløp, etter fratrekk av ikke-allokerte innbetalinger på 14 162,50 kroner, utgjør 64 375,00 kroner. \n\nTil tross for purringer og lang kredittid har kunden ikke gjort opp sitt mellomværende i henhold til avtale. Videre intern oppfølging vurderes som lite hensiktsmessig, og risikoen for ytterligere tap øker ved ytterligere utsettelse.\n\nMed vennlig hilsen DEMO JN AS"
    }
   ]
  }

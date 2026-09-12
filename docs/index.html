@@ -209,7 +209,7 @@
   el('kpis').innerHTML = [
     ['Bank og kontanter', nok(bank), 'konto ' + f.inputs.bankAccounts.map(x => x.accountNumber).join(', '), ''],
     ['Utestående kundefordringer', nok(a.netTotal), `${a.invoiceCount} åpne fakturaer ${nok(a.total)}, minus umatchede innbetalinger ${nok(-a.credits)}`, ''],
-    ['Reelt forfalt', nok(a.netOverdue), `${a.counterparts.filter(c => c.netOverdue > 0).length} av ${a.customerCount} kunder å purre`, 'red'],
+    ['Reelt forfalt', nok(a.netOverdue), `${a.toChaseCount ?? a.counterparts.filter(c => c.netOverdue > 0).length} av ${a.customerCount} kunder å purre`, 'red'],
     ['Umatchede innbetalinger', nok(-a.credits), `${a.overpaidCount} kunder har betalt mer enn de skylder`, 'amber'],
     ['Laveste likviditet, 13 uker', nok(f.lowestClosing.amount), 'uke fra ' + f.lowestClosing.weekStart, f.lowestClosing.amount < 0 ? 'red' : ''],
   ].map(([l, v, n, c]) => `<div class="card kpi"><div class="label">${l}</div><div class="value ${c}">${v}</div><div class="note">${n}</div></div>`).join('');
@@ -222,7 +222,7 @@
   el('chase').innerHTML = '<tr><th>Kunde</th><th class="num">Reelt forfalt</th><th class="num">Eldste</th><th>Neste steg</th></tr>' +
     a.counterparts.filter(c => c.netOverdue > 0).slice(0, 8).map(c => { const [t, cls] = STEP[c.suggestedStep.step]; return `<tr><td>${esc(c.counterpartName)}</td><td class="num">${nok(c.netOverdue)}</td><td class="num">${c.oldestDaysOverdue} d</td><td><span class="tag ${cls}">${t}</span></td></tr>`; }).join('');
 
-  el('revsum').textContent = `${r.errorCount} feil, ${r.warningCount} advarsler for ${r.year}. Rekkefølgen er valgt slik at rotårsaken kommer først.`;
+  el('revsum').textContent = `${r.errorCount} feil, ${r.warningCount} ${r.warningCount === 1 ? 'advarsel' : 'advarsler'} for ${r.year}. Rekkefølgen er valgt slik at rotårsaken kommer først.`;
   el('revision').innerHTML = r.remediations.map(m => {
     const sev = m.severity === 'error' ? ['Feil', 'critical'] : m.severity === 'warning' ? ['Advarsel', 'warning'] : ['Info', 'info'];
     const entries = m.proposedEntries.map(e => `<p><strong>Forslag: ${esc(e.title)}</strong></p>` + (e.lines.length ? `<table><tr><th>Konto</th><th class="num">Beløp</th><th>Tekst</th><th>Dato</th></tr>${e.lines.map(l => `<tr><td>${l.accountNumber}</td><td class="num">${nok(l.amount)}</td><td>${esc(l.description)}</td><td>${l.financialDate}</td></tr>`).join('')}</table>` : '') + `<p class="muted">${esc(e.caution)}</p>`).join('');
@@ -234,7 +234,7 @@
   el('assumptions').querySelector('ul').innerHTML = f.assumptions.map(x => `<li>${esc(x)}</li>`).join('') + `<li>Innbetalinger som ikke er koblet til faktura er trukket fra de eldste fakturaene først.</li>`;
 
   const dr = d.reminders.drafts[0];
-  if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong> · reelt forfalt ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step][1]}">${STEP[dr.step][0]}</span></p><pre>${esc(dr.text)}</pre>`;
+  if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong>${dr.source === 'ai-generate' ? '' : ' <span class="muted">(mal)</span>'} · reelt forfalt ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step][1]}">${STEP[dr.step][0]}</span></p><pre>${esc(dr.text)}</pre>`;
 })();
 </script>
 </body>
