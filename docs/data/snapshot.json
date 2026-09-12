@@ -1,0 +1,581 @@
+{
+ "capturedAt": "2026-09-12T11:46:53.029Z",
+ "company": "DEMO JN's company (Unimicro test)",
+ "aging": {
+  "asOf": "2026-09-12",
+  "total": 6042470,
+  "overdue": 6026720,
+  "overdueShare": 1,
+  "credits": -5274740,
+  "netTotal": 767730,
+  "netOverdue": 2183177.5,
+  "overpaidCount": 61,
+  "buckets": {
+   "notDue": 15750,
+   "d1_30": 173875,
+   "d31_60": 132450,
+   "d61_90": 156000,
+   "d90plus": 5564395
+  },
+  "counterparts": [
+   {
+    "counterpartId": 79,
+    "counterpartName": "Lofoten Anlegg ASA",
+    "total": 84187.5,
+    "overdue": 84187.5,
+    "credits": -18482.5,
+    "netTotal": 65705,
+    "netOverdue": 65705,
+    "oldestDaysOverdue": 1112,
+    "invoiceCount": 8,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 84187.5
+    },
+    "priority": 100,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1112 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 115,
+    "counterpartName": "Roar Brekke",
+    "total": 78537.5,
+    "overdue": 78537.5,
+    "credits": -14162.5,
+    "netTotal": 64375,
+    "netOverdue": 64375,
+    "oldestDaysOverdue": 837,
+    "invoiceCount": 8,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 78537.5
+    },
+    "priority": 99,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 837 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 66,
+    "counterpartName": "Susanne Eriksen",
+    "total": 57095,
+    "overdue": 57095,
+    "credits": -1322.5,
+    "netTotal": 55772.5,
+    "netOverdue": 55772.5,
+    "oldestDaysOverdue": 1207,
+    "invoiceCount": 5,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 57095
+    },
+    "priority": 91,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1207 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 140,
+    "counterpartName": "Kaja Aarseth",
+    "total": 75717.5,
+    "overdue": 75717.5,
+    "credits": -19990,
+    "netTotal": 55727.5,
+    "netOverdue": 55727.5,
+    "oldestDaysOverdue": 639,
+    "invoiceCount": 7,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 15375,
+     "d31_60": 15375,
+     "d61_90": 15375,
+     "d90plus": 29592.5
+    },
+    "priority": 91,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 639 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 32,
+    "counterpartName": "Sørlandet Materiell SA",
+    "total": 60092.5,
+    "overdue": 60092.5,
+    "credits": -9435,
+    "netTotal": 50657.5,
+    "netOverdue": 50657.5,
+    "oldestDaysOverdue": 1474,
+    "invoiceCount": 8,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 60092.5
+    },
+    "priority": 86,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1474 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 16,
+    "counterpartName": "Kari Fossum",
+    "total": 70237.5,
+    "overdue": 70237.5,
+    "credits": -20447.5,
+    "netTotal": 49790,
+    "netOverdue": 49790,
+    "oldestDaysOverdue": 1088,
+    "invoiceCount": 8,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 2570,
+     "d61_90": 0,
+     "d90plus": 67667.5
+    },
+    "priority": 85,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1088 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 110,
+    "counterpartName": "Lofoten Solutions ANS",
+    "total": 73830,
+    "overdue": 73830,
+    "credits": -24802.5,
+    "netTotal": 49027.5,
+    "netOverdue": 49027.5,
+    "oldestDaysOverdue": 870,
+    "invoiceCount": 6,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 73830
+    },
+    "priority": 85,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 870 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 56,
+    "counterpartName": "Sunnhordland Marine AS",
+    "total": 89505,
+    "overdue": 89505,
+    "credits": -41747.5,
+    "netTotal": 47757.5,
+    "netOverdue": 47757.5,
+    "oldestDaysOverdue": 1288,
+    "invoiceCount": 12,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 15625,
+     "d31_60": 15625,
+     "d61_90": 0,
+     "d90plus": 58255
+    },
+    "priority": 84,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1288 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 60,
+    "counterpartName": "Helgeland Partner AS",
+    "total": 76805,
+    "overdue": 76805,
+    "credits": -29377.5,
+    "netTotal": 47427.5,
+    "netOverdue": 47427.5,
+    "oldestDaysOverdue": 1061,
+    "invoiceCount": 8,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 76805
+    },
+    "priority": 83,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 1061 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   },
+   {
+    "counterpartId": 106,
+    "counterpartName": "Nordlys Transport ANS",
+    "total": 62387.5,
+    "overdue": 62387.5,
+    "credits": -15535,
+    "netTotal": 46852.5,
+    "netOverdue": 46852.5,
+    "oldestDaysOverdue": 902,
+    "invoiceCount": 6,
+    "buckets": {
+     "notDue": 0,
+     "d1_30": 0,
+     "d31_60": 0,
+     "d61_90": 0,
+     "d90plus": 62387.5
+    },
+    "priority": 83,
+    "suggestedStep": {
+     "step": "send_to_collection",
+     "rationale": "Oldest invoice 902 days overdue and past the inkassovarsel window; hand over to collection."
+    }
+   }
+  ],
+  "invoiceCount": 767,
+  "bucketLabels": {
+   "notDue": "Not due",
+   "d1_30": "1-30 days",
+   "d31_60": "31-60 days",
+   "d61_90": "61-90 days",
+   "d90plus": "90+ days"
+  },
+  "customerCount": 143
+ },
+ "forecast": {
+  "asOf": "2026-09-12",
+  "weeks": [
+   {
+    "weekStart": "2026-09-12",
+    "weekEnd": "2026-09-18",
+    "opening": 15597266.25,
+    "inflowsAR": 15277.5,
+    "outflowsAP": 3207364.8,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -3192958.19,
+    "closing": 12404308.06
+   },
+   {
+    "weekStart": "2026-09-19",
+    "weekEnd": "2026-09-25",
+    "opening": 12404308.06,
+    "inflowsAR": 172688,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": 171817.11,
+    "closing": 12576125.16
+   },
+   {
+    "weekStart": "2026-09-26",
+    "weekEnd": "2026-10-02",
+    "opening": 12576125.16,
+    "inflowsAR": 0,
+    "outflowsAP": 225138.76,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -226009.65,
+    "closing": 12350115.51
+   },
+   {
+    "weekStart": "2026-10-03",
+    "weekEnd": "2026-10-09",
+    "opening": 12350115.51,
+    "inflowsAR": 786927,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": 786056.11,
+    "closing": 13136171.61
+   },
+   {
+    "weekStart": "2026-10-10",
+    "weekEnd": "2026-10-16",
+    "opening": 13136171.61,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13135300.72
+   },
+   {
+    "weekStart": "2026-10-17",
+    "weekEnd": "2026-10-23",
+    "opening": 13135300.72,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13134429.82
+   },
+   {
+    "weekStart": "2026-10-24",
+    "weekEnd": "2026-10-30",
+    "opening": 13134429.82,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13133558.93
+   },
+   {
+    "weekStart": "2026-10-31",
+    "weekEnd": "2026-11-06",
+    "opening": 13133558.93,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13132688.04
+   },
+   {
+    "weekStart": "2026-11-07",
+    "weekEnd": "2026-11-13",
+    "opening": 13132688.04,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13131817.14
+   },
+   {
+    "weekStart": "2026-11-14",
+    "weekEnd": "2026-11-20",
+    "opening": 13131817.14,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13130946.25
+   },
+   {
+    "weekStart": "2026-11-21",
+    "weekEnd": "2026-11-27",
+    "opening": 13130946.25,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13130075.35
+   },
+   {
+    "weekStart": "2026-11-28",
+    "weekEnd": "2026-12-04",
+    "opening": 13130075.35,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13129204.46
+   },
+   {
+    "weekStart": "2026-12-05",
+    "weekEnd": "2026-12-11",
+    "opening": 13129204.46,
+    "inflowsAR": 0,
+    "outflowsAP": 0,
+    "outflowsFixed": 870.89,
+    "outflowsVat": 0,
+    "net": -870.89,
+    "closing": 13128333.56
+   }
+  ],
+  "lowestClosing": {
+   "amount": 12350115.51,
+   "weekStart": "2026-09-26"
+  },
+  "endClosing": 13128333.56,
+  "assumptions": [
+   "Receivables not yet due: 97% collected in their due week.",
+   "Receivables 1-60 days overdue: 80% collected within 2 weeks.",
+   "Receivables more than 60 days overdue: 40% collected in week 4, rest excluded.",
+   "Supplier invoices paid in their due week; overdue ones in week 1.",
+   "Fixed costs 3773.88/month spread evenly per week."
+  ],
+  "overdueReceivablesExcluded": 1224035,
+  "inputs": {
+   "bankAccounts": [
+    {
+     "accountNumber": 1920,
+     "accountName": "Bankinnskudd",
+     "balance": 15597266.25
+    }
+   ],
+   "openReceivablesGross": 767,
+   "openReceivablesAfterCredits": 269,
+   "unmatchedCredits": -5274740,
+   "openPayables": 86,
+   "monthlyFixedCosts": 3773.875
+  }
+ },
+ "revision": {
+  "year": 2026,
+  "errorCount": 2,
+  "warningCount": 1,
+  "remediations": [
+   {
+    "section": "Income statement opening balance",
+    "severity": "error",
+    "finding": {
+     "status": "Error",
+     "comment": "Income statement accounts have an opening balance",
+     "accountNumber": 0,
+     "accountName": "Start balance",
+     "value": -8813187.54,
+     "reason": "NotEquals 0"
+    },
+    "explanation": "Profit-and-loss accounts (3000-8999) carry an opening balance of −8 813 187,54 kr. P&L accounts must start each year at zero; last year's result should have been transferred to equity at year end.",
+    "likelyCauses": [
+     "Year-end closing (årsavslutning / disponering) was not performed for the previous year.",
+     "Opening balance import placed the previous result on a result account instead of equity.",
+     "The system shows the pseudo-account '0 - Udisponert resultat', meaning the result is not yet allocated."
+    ],
+    "diagnostics": [
+     "List P&L accounts with non-zero IB in 2026.",
+     "Check whether a year-end allocation entry exists dated 2025-12-31."
+    ],
+    "proposedEntries": [
+     {
+      "title": "Transfer 2025 result to equity (disponering)",
+      "lines": [
+       {
+        "accountNumber": 8960,
+        "amount": 8813187.54,
+        "description": "Overføring årsresultat 2025",
+        "financialDate": "2026-01-01",
+        "vatTypeId": null
+       },
+       {
+        "accountNumber": 2050,
+        "amount": -8813187.54,
+        "description": "Overføring årsresultat 2025 til annen egenkapital",
+        "financialDate": "2026-01-01",
+        "vatTypeId": null
+       }
+      ],
+      "caution": "Standard year-end allocation. If dividends or tax were decided, split the counter-post accordingly (2800 utbytte, 2500 betalbar skatt)."
+     }
+    ],
+    "requiresAccountantJudgement": true
+   },
+   {
+    "section": "Opening balance total",
+    "severity": "error",
+    "finding": {
+     "status": "Error",
+     "comment": "The opening balance has a difference",
+     "accountNumber": 0,
+     "accountName": "Start balance",
+     "value": 8813187.54,
+     "reason": "NotEquals 0"
+    },
+    "explanation": "The opening balance (IB) for 2026 does not sum to zero: debits and credits differ by 8 813 187,54 kr. A balance sheet must balance, so the IB was imported or posted incompletely. The difference equals the opening balance sitting on P&L accounts, so it disappears once last year's result is transferred to equity (see the 'Income statement opening balance' remediation).",
+    "likelyCauses": [
+     "Previous year's result never closed to equity (year-end allocation not run), so the balance-sheet side lacks its equity counter-post."
+    ],
+    "diagnostics": [
+     "Trial balance for 2026 period 1 with opening balances: which accounts carry IB?",
+     "Journal entries dated 2026-01-01 or earlier with 'IB' or 'Inngående balanse' in the description.",
+     "Compare closing balance 2025 period 12 with IB 2026 per account."
+    ],
+    "proposedEntries": [],
+    "requiresAccountantJudgement": true
+   },
+   {
+    "section": "Liability accounts",
+    "severity": "warning",
+    "finding": {
+     "status": "Warning",
+     "comment": "Liability account has a positive balance",
+     "accountNumber": 2710,
+     "accountName": "Inngående merverdiavgift, høy sats",
+     "value": 2156851.69,
+     "reason": "GreaterThan 0"
+    },
+    "explanation": "Account 2710 (Inngående merverdiavgift, høy sats) holds input VAT of 2 156 851,69 kr that has never been settled. Input VAT is a receivable from the state until the VAT return (mva-melding) is run, which nets the 2700-series accounts against 2740 Oppgjørskonto merverdiavgift.",
+    "likelyCauses": [
+     "VAT returns have not been run or booked for the periods (common in demo companies).",
+     "VAT settlement entries were posted to the wrong account."
+    ],
+    "diagnostics": [
+     "Statistics: sum of JournalEntryLine.Amount on 2710 per VAT period for 2026.",
+     "Check VatReport status per bi-monthly term for 2026."
+    ],
+    "proposedEntries": [
+     {
+      "title": "Run the VAT return for each open term instead of posting manually",
+      "lines": [],
+      "caution": "Do not post manually: create and approve the mva-melding for each term in the system; it books 2700/2710 against 2740 automatically and files to Skatteetaten."
+     }
+    ],
+    "requiresAccountantJudgement": true
+   }
+  ],
+  "note": "Use book_correcting_entry to book a proposed entry after an accountant has approved it."
+ },
+ "reminders": {
+  "asOf": "2026-09-12",
+  "count": 3,
+  "drafts": [
+   {
+    "customerId": 79,
+    "customer": "Lofoten Anlegg ASA",
+    "overdue": 84187.5,
+    "unmatchedCredits": -18482.5,
+    "netOverdue": 65705,
+    "oldestDaysOverdue": 1112,
+    "step": "send_to_collection",
+    "rationale": "Oldest invoice 1112 days overdue and past the inkassovarsel window; hand over to collection.",
+    "text": "Internt notat: Lofoten Anlegg ASA har krav 84187.50 NOK som er 1112 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10295, forfalt 2023-08-27, utestående 11892.50 NOK\n  - Faktura 10300, forfalt 2023-08-29, utestående 2362.50 NOK\n  - Faktura 10301, forfalt 2023-08-29, utestående 7235.00 NOK\n  - Faktura 10360, forfalt 2023-10-19, utestående 21712.50 NOK\n  - Faktura 10634, forfalt 2024-05-13, utestående 8875.00 NOK\n  - Faktura 10676, forfalt 2024-06-12, utestående 8875.00 NOK\n  - Faktura 10719, forfalt 2024-07-12, utestående 8875.00 NOK\n  - Faktura 10754, forfalt 2024-08-04, utestående 14360.00 NOK"
+   },
+   {
+    "customerId": 115,
+    "customer": "Roar Brekke",
+    "overdue": 78537.5,
+    "unmatchedCredits": -14162.5,
+    "netOverdue": 64375,
+    "oldestDaysOverdue": 837,
+    "step": "send_to_collection",
+    "rationale": "Oldest invoice 837 days overdue and past the inkassovarsel window; hand over to collection.",
+    "text": "Internt notat: Roar Brekke har krav 78537.50 NOK som er 837 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10646, forfalt 2024-05-28, utestående 5235.00 NOK\n  - Faktura 10650, forfalt 2024-05-29, utestående 8617.50 NOK\n  - Faktura 10655, forfalt 2024-05-30, utestående 7837.50 NOK\n  - Faktura 11222, forfalt 2025-07-08, utestående 4170.00 NOK\n  - Faktura 11483, forfalt 2026-04-04, utestående 14625.00 NOK\n  - Faktura 11498, forfalt 2026-04-23, utestående 8802.50 NOK\n  - Faktura 11509, forfalt 2026-05-04, utestående 14625.00 NOK\n  - Faktura 11537, forfalt 2026-06-03, utestående 14625.00 NOK"
+   },
+   {
+    "customerId": 66,
+    "customer": "Susanne Eriksen",
+    "overdue": 57095,
+    "unmatchedCredits": -1322.5,
+    "netOverdue": 55772.5,
+    "oldestDaysOverdue": 1207,
+    "step": "send_to_collection",
+    "rationale": "Oldest invoice 1207 days overdue and past the inkassovarsel window; hand over to collection.",
+    "text": "Internt notat: Susanne Eriksen har krav 57095.00 NOK som er 1207 dager forfalt og har passert inkassovarsel-fristen. Anbefaling: overfør til inkassobyrå. Fakturaer:\n  - Faktura 10218, forfalt 2023-05-24, utestående 5735.00 NOK\n  - Faktura 11311, forfalt 2025-10-03, utestående 13125.00 NOK\n  - Faktura 11342, forfalt 2025-11-02, utestående 13125.00 NOK\n  - Faktura 11354, forfalt 2025-11-17, utestående 11985.00 NOK\n  - Faktura 11371, forfalt 2025-12-02, utestående 13125.00 NOK"
+   }
+  ]
+ }
+}

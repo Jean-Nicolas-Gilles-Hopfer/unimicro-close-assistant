@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Close Assistant for Unimicro</title>
+<meta name="description" content="Månedsavslutning uten detektivarbeid: purring med hodet, likviditet du kan stole på, og en revisjonssjekk som forklarer seg. Unimicro Hackathon 2026.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f8f9; --card: #ffffff; --text: #2b2b2b; --muted: #676767; --border: #d6dee5;
+    --blue: #2253dd; --blue-soft: #e5effd; --red: #c7231b; --red-soft: #fff2f1; --amber: #eb830a; --amber-soft: #fff7e7;
+    --green: #50b46f; --green-soft: #f1fef5; --header: #e7ecf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121518; --card: #1b1f24; --text: #e8eaed; --muted: #a6acb3; --border: #3a4552;
+      --blue: #7ea6ff; --blue-soft: #1f3057; --red: #ff8a82; --red-soft: #3a1b19; --amber: #f0a13a; --amber-soft: #3a2b10;
+      --green: #5ec27e; --green-soft: #16301f; --header: #232a33;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121518; --card: #1b1f24; --text: #e8eaed; --muted: #a6acb3; --border: #3a4552;
+    --blue: #7ea6ff; --blue-soft: #1f3057; --red: #ff8a82; --red-soft: #3a1b19; --amber: #f0a13a; --amber-soft: #3a2b10;
+    --green: #5ec27e; --green-soft: #16301f; --header: #232a33;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 Inter, "Segoe UI", system-ui, sans-serif; }
+  a { color: var(--blue); }
+  header.hero { padding: 3.5rem 1.5rem 2.5rem; text-align: center; border-bottom: 1px solid var(--border); background: var(--card); }
+  .hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin: 0 0 .5rem; letter-spacing: -.01em; }
+  .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 46rem; margin: 0 auto 1.25rem; }
+  .hero .cta { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: .6rem 1.1rem; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: var(--card); font-weight: 500; }
+  .btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+  section { margin: 2.5rem 0; }
+  h2 { font-size: 1.5rem; margin: 0 0 .25rem; }
+  h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
+  p.sub { color: var(--muted); margin: 0 0 1rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.15rem; }
+  .kpis { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .kpi .label { color: var(--muted); font-size: .85rem; }
+  .kpi .value { font-size: 1.45rem; font-weight: 600; margin: .15rem 0; white-space: nowrap; }
+  .kpi .note { color: var(--muted); font-size: .8rem; }
+  .red { color: var(--red); } .amber { color: var(--amber); } .green { color: var(--green); }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--border); }
+  th { background: var(--header); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: .1rem .55rem; border-radius: 99px; font-size: .78rem; border: 1px solid var(--border); white-space: nowrap; }
+  .tag.critical { background: var(--red-soft); color: var(--red); border-color: var(--red); }
+  .tag.warning { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
+  .tag.success { background: var(--green-soft); color: var(--green); border-color: var(--green); }
+  .tag.info { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+  .bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--header); margin: .5rem 0 1rem; }
+  .bar div { height: 100%; }
+  details { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .85rem; margin: .5rem 0; background: var(--card); }
+  summary { cursor: pointer; font-weight: 500; }
+  details p, details ul { margin: .5rem 0; font-size: .92rem; }
+  pre { white-space: pre-wrap; font: inherit; font-size: .9rem; background: var(--header); padding: .75rem; border-radius: 8px; }
+  .problems { counter-reset: p; }
+  .problems .card { position: relative; padding-top: 1.1rem; }
+  .problems h3::before { counter-increment: p; content: counter(p) ". "; color: var(--blue); }
+  .wide { grid-column: 1 / -1; }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 2rem 1rem 3rem; border-top: 1px solid var(--border); }
+  .toggle { position: fixed; right: 16px; bottom: 16px; }
+  .shots { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .shots figure { margin: 0; }
+  .shots img { width: 100%; border: 1px solid var(--border); border-radius: 8px; display: block; }
+  .shots figcaption { font-size: .85rem; color: var(--muted); margin-top: .35rem; }
+  .video { aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: 10px; background: var(--header); }
+  .muted { color: var(--muted); }
+  @media (max-width: 700px) { .kpi .value { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>Close Assistant for Unimicro</h1>
+  <p class="lead">Månedsavslutning uten detektivarbeid. Hvem skal jeg purre? Hvor mye penger har vi egentlig? Hvorfor er revisjonssjekken rød? Svarene, rett inne i Unimicro.</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant">Kildekode på GitHub</a>
+    <a class="btn" href="#demo">Se tallene</a>
+    <a class="btn" href="#video">Video</a>
+    <a class="btn" href="#dark">Bonus: mørk modus</a>
+  </div>
+  <p class="muted" style="margin-top:1rem;font-size:.85rem">Unimicro Hackathon 2026 · Jean-Nicolas Gilles Hopfer · bygget med Claude</p>
+</header>
+
+<main>
+  <section>
+    <h2>Tre problemer, ett tillegg</h2>
+    <p class="sub">Alt leses som innlogget bruker via Unimicros API. Ingenting bokføres uten Unimicros egen bekreftelse.</p>
+    <div class="grid problems">
+      <div class="card">
+        <h3>Purring med hodet</h3>
+        <p>Åpne fakturaer aldersfordeles og kundene rangeres etter det som <em>faktisk</em> er forfalt: innbetalinger som aldri ble koblet til en faktura trekkes fra først. I demoselskapet lå det 5,3 millioner slik. Neste steg foreslås etter norsk praksis, og ett klikk lager purreteksten med Unimicros egen tekstgenerator.</p>
+      </div>
+      <div class="card">
+        <h3>Likviditet du kan stole på</h3>
+        <p>13-ukers prognose fra banksaldo, åpne kunde- og leverandørfakturaer og faste kostnader. Forutsetningene står i klartekst, og laveste punkt er markert. Penger som allerede er mottatt telles ikke som fremtidig innbetaling.</p>
+      </div>
+      <div class="card">
+        <h3>Revisjonssjekk som forklarer seg</h3>
+        <p>Samme kontroller som Unimicros revisjonssjekk, pluss to egne (umatchede innbetalinger, mva-melding). For hver feil: årsak, hvordan du sjekker, og det balanserte korreksjonsbilaget, i riktig rekkefølge.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="where">
+    <h2>Der regnskapsføreren allerede er</h2>
+    <p class="sub">Én plugin, fem flater: side under Salg, widget på dashbordet, merkelapp på faktura og kunde, kolonne i fakturalisten. Samme logikk finnes også som MCP-server for Claude og andre AI-assistenter.</p>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <section id="demo">
+    <h2>Tallene fra demoselskapet</h2>
+    <p class="sub" id="captured">Øyeblikksbilde fra Unimicros testmiljø.</p>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid" style="margin-top:1rem">
+      <div class="card">
+        <h3>Aldersfordeling (brutto)</h3>
+        <div class="bar" id="agebar"></div>
+        <table id="agetable"></table>
+        <p class="sub" id="agenote" style="margin-top:.75rem"></p>
+      </div>
+      <div class="card">
+        <h3>Kunder å følge opp først</h3>
+        <table id="chase"></table>
+      </div>
+      <div class="card wide">
+        <h3>Revisjonssjekk</h3>
+        <p class="sub" id="revsum"></p>
+        <div id="revision"></div>
+      </div>
+      <div class="card wide">
+        <h3>Likviditetsprognose, 13 uker</h3>
+        <table id="forecast"></table>
+        <details id="assumptions"><summary>Forutsetninger</summary><ul></ul></details>
+      </div>
+      <div class="card wide">
+        <h3>Purretekst, skrevet av Unimicros tekstgenerator</h3>
+        <p class="sub">Eksempel på det ett klikk gir, med de reelle beløpene etter matching.</p>
+        <div id="reminder"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="video">
+    <h2>Video</h2>
+    <p class="sub">Under ett minutt.</p>
+    <div id="videobox"><p class="muted">Videoen legges inn før innlevering.</p></div>
+  </section>
+
+  <section id="dark">
+    <h2>Bonus: mørk modus for Unimicro</h2>
+    <div class="grid">
+      <div class="card">
+        <p>Unimicro har ikke mørk modus, men designsystemet er bygget for det: hver farge er et navngitt token. Vi laget et komplett mørkt tema i samme format som merkevaretemaene for DNB, SpareBank 1, Eika og Azets, kontrastsjekket mot WCAG AA, og en liten nettleserutvidelse med lys/mørk-bryter som viser det live.</p>
+        <p><a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant/tree/main/theme">Temaet, kontrastsjekken og utvidelsen</a> · De få stedene appen bruker hardkodede farger er dokumentert som det Unimicro selv må rette.</p>
+      </div>
+      <div class="card"><figure style="margin:0" id="darkshot"><p class="muted">Skjermbilde legges inn.</p></figure></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2>Slik er det bygget</h2>
+    <div class="grid">
+      <div class="card"><h3>Plugin</h3><p>Unimicros plugin-plattform (Lit, native visninger, designsystemets komponenter og tokens). Data via <code>host.api</code> og statistikk-endepunktet. Ingen egen backend.</p></div>
+      <div class="card"><h3>Delt domenelogikk</h3><p>Aldersfordeling, purretrinn, prognose og revisjonsforklaringer er ren TypeScript med enhetstester, brukt både av pluginen og MCP-serveren.</p></div>
+      <div class="card"><h3>MCP-server</h3><p>Samme verktøy for Claude og andre assistenter: REST + statistikk, og Unimicros egen MCP for bokføring med bekreftelse.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>Close Assistant · Unimicro Hackathon 2026 · <a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant">GitHub</a></footer>
+<button class="btn toggle" id="themeToggle" type="button">☾ Mørk</button>
+
+<script>
+(async () => {
+  const nok = (n) => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(n);
+  const STEP = { none: ['Ikke forfalt','success'], friendly_reminder: ['Vennlig påminnelse','info'], reminder_with_fee: ['Purring','warning'], debt_collection_notice: ['Inkassovarsel','critical'], send_to_collection: ['Til inkasso','critical'] };
+  const SECTION = { 'Opening balance total': 'Åpningsbalansen går ikke i null', 'Income statement opening balance': 'Resultatkontoer har inngående balanse', 'Receivables': 'Kundefordringer avviker fra reskontro', 'Liability accounts': 'Gjeldskonto med debetsaldo', 'Unmatched customer payments': 'Umatchede innbetalinger fra kunder', 'VAT returns': 'Mva-melding ikke levert' };
+  const BUCKET = { notDue: ['Ikke forfalt','#50b46f'], d1_30: ['1–30 dager','#9ccc3a'], d31_60: ['31–60 dager','#eb830a'], d61_90: ['61–90 dager','#f26a2a'], d90plus: ['Over 90 dager','#c7231b'] };
+  const el = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+  // theme toggle
+  const root = document.documentElement, tb = el('themeToggle');
+  const setTheme = (t) => { if (t) root.setAttribute('data-theme', t); else root.removeAttribute('data-theme'); const dark = t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches); tb.textContent = dark ? '☀ Lys' : '☾ Mørk'; try { localStorage.setItem('theme', t || ''); } catch {} };
+  let saved = ''; try { saved = localStorage.getItem('theme') || ''; } catch {}
+  setTheme(saved);
+  tb.onclick = () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+
+  // screenshots: shown when the files exist
+  const shots = [
+    ['img/overview.png', 'Oversiktssiden under Salg'], ['img/widget.png', 'Widget på dashbordet'],
+    ['img/invoice-header.png', 'Merkelapp på fakturaen'], ['img/customer-header.png', 'Merkelapp på kunden'],
+    ['img/invoice-list.png', 'Kolonne i fakturalisten'], ['img/reminder.png', 'Purretekst på ett klikk'],
+  ];
+  for (const [src, cap] of shots) { const img = new Image(); img.onload = () => { const f = document.createElement('figure'); f.innerHTML = `<img src="${src}" alt="${esc(cap)}"><figcaption>${esc(cap)}</figcaption>`; el('shots').appendChild(f); }; img.src = src; }
+  const dark = new Image(); dark.onload = () => { el('darkshot').innerHTML = `<img src="img/dark-mode.png" alt="Unimicro i mørk modus" style="width:100%;border-radius:8px;border:1px solid var(--border)"><figcaption class="muted" style="font-size:.85rem">Unimicro i mørk modus, med Close Assistant inni.</figcaption>`; }; dark.src = 'img/dark-mode.png';
+
+  let d; try { d = await (await fetch('data/snapshot.json')).json(); } catch { el('kpis').innerHTML = '<p class="muted">Kunne ikke laste øyeblikksbildet.</p>'; return; }
+  el('captured').textContent = `Øyeblikksbilde fra ${d.company}, hentet ${new Date(d.capturedAt).toLocaleString('nb-NO')}.`;
+  const a = d.aging, f = d.forecast, r = d.revision;
+  const bank = f.inputs.bankAccounts.reduce((s, x) => s + x.balance, 0);
+  el('kpis').innerHTML = [
+    ['Bank og kontanter', nok(bank), 'konto ' + f.inputs.bankAccounts.map(x => x.accountNumber).join(', '), ''],
+    ['Utestående kundefordringer', nok(a.netTotal), `${a.invoiceCount} åpne fakturaer ${nok(a.total)}, minus umatchede innbetalinger ${nok(-a.credits)}`, ''],
+    ['Reelt forfalt', nok(a.netOverdue), `${a.counterparts.filter(c => c.netOverdue > 0).length} av ${a.customerCount} kunder å purre`, 'red'],
+    ['Umatchede innbetalinger', nok(-a.credits), `${a.overpaidCount} kunder har betalt mer enn de skylder`, 'amber'],
+    ['Laveste likviditet, 13 uker', nok(f.lowestClosing.amount), 'uke fra ' + f.lowestClosing.weekStart, f.lowestClosing.amount < 0 ? 'red' : ''],
+  ].map(([l, v, n, c]) => `<div class="card kpi"><div class="label">${l}</div><div class="value ${c}">${v}</div><div class="note">${n}</div></div>`).join('');
+
+  const total = Object.values(a.buckets).reduce((s, x) => s + x, 0);
+  el('agebar').innerHTML = Object.entries(a.buckets).filter(([, v]) => v > 0).map(([k, v]) => `<div style="flex:${v};background:${BUCKET[k][1]}" title="${BUCKET[k][0]}: ${nok(v)}"></div>`).join('');
+  el('agetable').innerHTML = '<tr><th>Alder</th><th class="num">Beløp</th></tr>' + Object.entries(a.buckets).map(([k, v]) => `<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BUCKET[k][1]};margin-right:.5rem"></span>${BUCKET[k][0]}</td><td class="num">${nok(v)}</td></tr>`).join('');
+  el('agenote').textContent = `Brutto ${nok(total)}. Etter matching av innbetalinger er ${nok(a.netOverdue)} reelt forfalt.`;
+
+  el('chase').innerHTML = '<tr><th>Kunde</th><th class="num">Reelt forfalt</th><th class="num">Eldste</th><th>Neste steg</th></tr>' +
+    a.counterparts.filter(c => c.netOverdue > 0).slice(0, 8).map(c => { const [t, cls] = STEP[c.suggestedStep.step]; return `<tr><td>${esc(c.counterpartName)}</td><td class="num">${nok(c.netOverdue)}</td><td class="num">${c.oldestDaysOverdue} d</td><td><span class="tag ${cls}">${t}</span></td></tr>`; }).join('');
+
+  el('revsum').textContent = `${r.errorCount} feil, ${r.warningCount} advarsler for ${r.year}. Rekkefølgen er valgt slik at rotårsaken kommer først.`;
+  el('revision').innerHTML = r.remediations.map(m => {
+    const sev = m.severity === 'error' ? ['Feil', 'critical'] : m.severity === 'warning' ? ['Advarsel', 'warning'] : ['Info', 'info'];
+    const entries = m.proposedEntries.map(e => `<p><strong>Forslag: ${esc(e.title)}</strong></p>` + (e.lines.length ? `<table><tr><th>Konto</th><th class="num">Beløp</th><th>Tekst</th><th>Dato</th></tr>${e.lines.map(l => `<tr><td>${l.accountNumber}</td><td class="num">${nok(l.amount)}</td><td>${esc(l.description)}</td><td>${l.financialDate}</td></tr>`).join('')}</table>` : '') + `<p class="muted">${esc(e.caution)}</p>`).join('');
+    return `<details><summary><span class="tag ${sev[1]}">${sev[0]}</span> ${esc(SECTION[m.section] || m.section)}${m.finding.accountNumber ? ` (konto ${m.finding.accountNumber})` : ''} – ${nok(Math.abs(m.finding.value))}</summary><p>${esc(m.explanation)}</p><p><strong>Sannsynlige årsaker</strong></p><ul>${m.likelyCauses.map(c => `<li>${esc(c)}</li>`).join('')}</ul><p><strong>Slik sjekker du</strong></p><ul>${m.diagnostics.map(c => `<li>${esc(c)}</li>`).join('')}</ul>${entries}</details>`;
+  }).join('');
+
+  el('forecast').innerHTML = '<tr><th>Uke fra</th><th class="num">Inn (kunder)</th><th class="num">Ut (leverandører)</th><th class="num">Faste kostnader</th><th class="num">Saldo</th></tr>' +
+    f.weeks.map(w => `<tr><td>${w.weekStart}</td><td class="num">${nok(w.inflowsAR)}</td><td class="num">${nok(w.outflowsAP)}</td><td class="num">${nok(w.outflowsFixed)}</td><td class="num ${w.closing < 0 ? 'red' : ''}">${nok(w.closing)}</td></tr>`).join('');
+  el('assumptions').querySelector('ul').innerHTML = f.assumptions.map(x => `<li>${esc(x)}</li>`).join('') + `<li>Innbetalinger som ikke er koblet til faktura er trukket fra de eldste fakturaene først.</li>`;
+
+  const dr = d.reminders.drafts[0];
+  if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong> · reelt forfalt ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step][1]}">${STEP[dr.step][0]}</span></p><pre>${esc(dr.text)}</pre>`;
+})();
+</script>
+</body>
+</html>
