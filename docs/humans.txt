@@ -1,0 +1,13 @@
+/* TEAM */
+  Product designer, unsolicited feedback, sprinkles: Jean-Nicolas Gilles Hopfer
+  Site: https://jean-nicolas.framer.website
+  Location: Oslo, Norway
+
+/* HEAVY LIFTING */
+  Code, tests, research: Claude (Anthropic), steered by a product designer who does not write code.
+  Every number on the demo page comes from Unimicro's test environment, not from a mock.
+
+/* SITE */
+  Built for: Unimicro Hackathon 2026
+  Stack: Unimicro plugin platform (Lit), TypeScript, MCP, one static HTML page
+  Fonts: Anek Gurmukhi, Inter (as on unimicro.no)

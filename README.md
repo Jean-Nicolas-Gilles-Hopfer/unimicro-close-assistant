@@ -42,4 +42,6 @@ Everything is read as the signed-in user. Nothing is booked without Unimicro's o
 - Plugin: `cd plugin && npm install && unimicro login && unimicro plugin dev`, then open the link the CLI prints.
 - MCP server: `cd close-assistant && npm install && npm run cli -- login mcp && npm run cli -- tool get_receivables_aging`.
 
-Built by Jean-Nicolas Gilles Hopfer with Claude during Unimicro Hackathon 2026 (5–15 September).
+Built during Unimicro Hackathon 2026 (5–15 September) by Jean-Nicolas Gilles Hopfer, a product designer who does
+not write code. Claude did the heavy lifting; Jean-Nicolas added the sprinkles, the dark mode and the unsolicited
+feedback. Demo page: `docs/` (GitHub Pages).

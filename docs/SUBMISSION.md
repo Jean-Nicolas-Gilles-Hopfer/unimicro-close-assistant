@@ -77,14 +77,34 @@ language. Everything is read as the signed-in user; nothing is booked without Un
 
 ## Video script (under 60 seconds, landscape)
 
-| Time | Screen | Say (Norwegian) |
-|---|---|---|
-| 0–8 s | Face / Unimicro dashboard | "Hei, jeg er Jean-Nicolas. Månedsavslutning i Unimicro tar tid fordi tre spørsmål mangler svar. Close Assistant svarer på dem." |
-| 8–22 s | Close Assistant page, KPIs and chase list | "Hvem skal jeg purre? Her er kundene rangert etter det som faktisk er forfalt – etter at 5,3 millioner i umatchede innbetalinger er trukket fra. Ett klikk lager purreteksten." |
-| 22–34 s | Click "Lag tekst", drawer with generated letter | "Teksten skrives av Unimicros egen tekstgenerator, med riktig tone for hvor langt kunden har gått." |
-| 34–46 s | Revision card, expand a finding | "Hvorfor er revisjonssjekken rød? Close Assistant forklarer årsaken og foreslår bilaget som retter det." |
-| 46–55 s | Dashboard widget + invoice header tag | "Og det følger deg overalt: på dashbordet, på fakturaen, på kunden." |
-| 55–60 s | Repo / logo | "Bygget på ti dager med Unimicros plugin-plattform og MCP. Takk!" |
+Face to camera for the opener, then screen. Deadpan, one beat per line, no laughing at your own jokes. English is
+fine (the concept text is in both languages); a Norwegian version is below the table if you prefer.
 
-Recording tips: 1920×1080, browser at 100 % zoom, hide bookmarks bar, Norwegian UI. Record with OBS or Windows
-Game Bar (Win+G); export MP4; upload to Dropbox/OneDrive and paste the download link in the form.
+Pick one opener (0–8 s, face to camera):
+
+- A. "Hi, I'm Jean-Nicolas. I'm a product designer, so my superpower is unsolicited feedback. Unimicro, here's
+  some. With the fixes attached."
+- B. "Hi, I'm Jean-Nicolas. In the demo company, 5.3 million kroner of customer payments were never matched to an
+  invoice. That's not a bug. That's a true-crime podcast."
+- C. "Hi, I'm Jean-Nicolas. I don't write code. Claude did the heavy lifting; I added the sprinkles. Let me show you
+  the sprinkles."
+
+| Time | Screen | Say |
+|---|---|---|
+| 0–8 s | Face to camera | Opener A, B or C. |
+| 8–20 s | Close Assistant page: KPIs, then the chase list | "Month-end in Unimicro leaves three questions open. One: who do I chase? Close Assistant ranks customers by what is *actually* overdue, after deducting payments nobody matched. In this company, that was 5.3 million." |
+| 20–30 s | Click "Lag tekst", the drawer with the letter | "One click, and Unimicro's own text generator writes the reminder. In Norwegian. Firmer than I would be." |
+| 30–42 s | Revision card, expand one finding | "Two: why is the revision check red? Unimicro says 'error'. Close Assistant says why, how to verify it, and proposes the balanced entry. Turns out two errors were one forgotten year-end." |
+| 42–50 s | Dashboard widget, then the invoice header tag | "Three: how much cash do we really have? Thirteen weeks ahead, on the dashboard, and the answers follow you to every invoice and customer." |
+| 50–58 s | Toggle dark mode (extension), let it land | "And because I'm a designer and could not help myself: Unimicro, in dark mode. You're welcome." |
+| 58–60 s | Demo page or repo | "Close Assistant. Thanks." |
+
+Norwegian alternative for the screen part, if you record in Norwegian: "Hvem skal jeg purre? Her er kundene
+rangert etter det som faktisk er forfalt, etter at 5,3 millioner i umatchede innbetalinger er trukket fra. Ett
+klikk lager purreteksten." / "Hvorfor er revisjonssjekken rød? Close Assistant forklarer årsaken og foreslår
+bilaget som retter det." / "Hvor mye penger har vi egentlig? Tretten uker frem, rett på dashbordet." / "Og fordi
+jeg er designer og ikke klarte å la det være: Unimicro i mørk modus."
+
+Recording tips: 1920×1080, browser at 100 % zoom, hide bookmarks bar. Record with OBS or Windows Game Bar (Win+G);
+export MP4; upload to Dropbox/OneDrive/YouTube (unlisted) and paste the link in the form. The plugin only shows while
+`unimicro plugin dev` is running; ask Claude to start it before recording.
