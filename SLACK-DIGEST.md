@@ -18,24 +18,24 @@ Answers came from the Unimicro platform team; names are left out here.
 ## Technical answers from #help
 - **Dashboard widgets**: dashboard on test.unimicro.no has "Plugin widget small" and "Plugin widget large"
   slots. Create with `unimicro plugin add view --shape slot --slot dashboard.widget`; the plugin then renders
-  inside the widget. (anders.urrang, 8 Sept)
+  inside the widget. (Unimicro platform team, 8 Sept)
 - **Calling your own external API from a plugin**: allowed on test.unimicro.no today because the CSP is
   report-only; you must allow origin `https://test.unimicro.no` in your API's CORS. Production may later
   require a proxy; no timeline. (Unimicro platform team, 8 Sept)
 - **ai-generate endpoint** (LLM proxy inside the business API, OpenAI-shaped) was switched on for the test
   environment on 9 Sept: `POST /api/biz/ai-generate?action=generate-text` with
   `{"Prompt": "...", "Temperature": 100, "TopPercentage": 99}`; `?action=check-has-ai` returns `hasAI`.
-  Text only; for PDFs run OCR first and pass the text. (sveinung)
+  Text only; for PDFs run OCR first and pass the text. (Unimicro platform team)
 - **File upload from a plugin**: build a Blob + FormData with field `File` and
-  `await this.host.api.post('~files/api/file?doocr=false', form)`. (sveinung, 9 Sept)
+  `await this.host.api.post('~files/api/file?doocr=false', form)`. (Unimicro platform team, 9 Sept)
 - **File image preview from a plugin** (page images of inbox files) is not supported yet; team working on
   file streaming, "ETA tomorrow" said 9 Sept. (Unimicro platform team)
-- **Refresh tokens / offline_access** for a portal-registered client gave `invalid_scope`; UniLars-Erik said
+- **Refresh tokens / offline_access** for a portal-registered client gave `invalid_scope`; Unimicro staff said
   it is a dev-portal bug, enabled it manually for that client, and warned: do not press Save in the dev
   portal afterwards or it disappears. Also choose roles/scopes per area (sales, accounting) rather than all
   sub-items. → We can ask for offline_access on our client the same way.
 - **MCP write operations failing from Claude mobile voice mode**: likely the elicitation requirement;
-  Unimicro checking. (sveinung)
+  Unimicro checking. (Unimicro platform team)
 - **Login**: developer.unimicro.no login works but dev-login.unimicro.no may reject the same account (6 replies,
   not read in full).
 - Widgets vs plugin views: "own plugin type for widgets" planned so several integrations can contribute widgets.
