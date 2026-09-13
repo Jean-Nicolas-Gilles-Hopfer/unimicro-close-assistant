@@ -44,7 +44,8 @@
   .lang button { border: 0; background: transparent; color: var(--hero-muted); padding: .35rem .8rem; cursor: pointer; font: inherit; font-size: .85rem; font-weight: 600; }
   .lang button[aria-pressed="true"] { background: var(--lime); color: var(--ink); }
   main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
-  section { margin: 3rem 0; }
+  section { margin: 3rem 0; scroll-margin-top: 1.25rem; }
+  html { scroll-behavior: smooth; }
   h2 { font-size: 1.75rem; margin: 0 0 .25rem; }
   h3 { font-size: 1.15rem; margin: 0 0 .5rem; }
   p.sub { color: var(--muted); margin: 0 0 1rem; }
@@ -107,7 +108,7 @@
   <h1>Close Assistant for Unimicro</h1>
   <p class="lead" data-i18n="lead"></p>
   <div class="cta">
-    <a class="btn primary" href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant" data-i18n="ctaCode"></a>
+    <a class="btn primary" href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant" target="_blank" rel="noopener" data-i18n="ctaCode"></a>
     <a class="btn" href="#demo" data-i18n="ctaNumbers"></a>
     <a class="btn" href="#video" data-i18n="ctaVideo"></a>
     <a class="btn" href="#dark" data-i18n="ctaDark"></a>
@@ -178,7 +179,7 @@
     <div class="grid">
       <div class="card">
         <p data-i18n="k.t1"></p>
-        <p><a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant/tree/main/theme" data-i18n="k.link"></a> · <span data-i18n="k.t2"></span></p>
+        <p><a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant/tree/main/theme" target="_blank" rel="noopener" data-i18n="k.link"></a> · <span data-i18n="k.t2"></span></p>
       </div>
       <div class="card" id="darkshot"><p class="muted" data-i18n="k.pending"></p></div>
     </div>
@@ -194,7 +195,7 @@
   </section>
 </main>
 
-<footer>Close Assistant · Unimicro Hackathon 2026 · <a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant">GitHub</a></footer>
+<footer>Close Assistant · Unimicro Hackathon 2026 · <a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant" target="_blank" rel="noopener">GitHub</a></footer>
 <button class="btn toggle" id="themeToggle" type="button"></button>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
@@ -304,6 +305,10 @@ console.log('%cBonjour Hei!%c\nYou opened the developer tools on a page made by 
     for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
   };
   for (const b of document.querySelectorAll('.lang button')) b.onclick = () => { lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch {} render(); };
+  applyStatic(); // text shows before the data and screenshots arrive
+  let readyResolve; const ready = new Promise((r) => { readyResolve = r; });
+  const jump = (hash) => { const target = hash && document.querySelector(hash); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  document.addEventListener('click', (e) => { const a = e.target.closest('a[href^="#"]'); if (!a) return; e.preventDefault(); const hash = a.getAttribute('href'); ready.then(() => { jump(hash); history.replaceState(null, '', hash); }); });
 
   // ---- theme ---------------------------------------------------------------------------------------
   const root = document.documentElement, tb = el('themeToggle');
@@ -383,6 +388,8 @@ console.log('%cBonjour Hei!%c\nYou opened the developer tools on a page made by 
     if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong>${dr.source === 'ai-generate' ? '' : ` <span class="muted">${t('remTemplate')}</span>`} · ${t('remLine')} ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step].cls}">${STEP[dr.step][lang]}</span></p><pre>${esc(dr.text)}</pre>`;
   }
   render();
+  readyResolve();
+  if (location.hash) requestAnimationFrame(() => jump(location.hash));
 })();
 </script>
 </body>
