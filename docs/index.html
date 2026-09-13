@@ -11,22 +11,16 @@
 <style>
   /* Palette and type follow unimicro.no: ink #092329, blue #133EE2, lime #D0F59E, warm off-white, Anek Gurmukhi headings, Inter body. */
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     --ink: #092329; --ink-2: #0e2e35; --lime: #d0f59e;
     --bg: #f7f6f3; --card: #ffffff; --text: #092329; --muted: #5d6f78; --border: #d9e1e6;
     --blue: #133ee2; --blue-soft: #e8edfd; --red: #c7231b; --red-soft: #fff2f1; --amber: #d97706; --amber-soft: #fff7e7;
     --green: #2f9e5a; --green-soft: #f1fef5; --header: #eef2f5;
     --hero-bg: #092329; --hero-text: #ffffff; --hero-muted: #b9c8cf; --hero-border: rgba(255,255,255,.22);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #071b20; --card: #0e2e35; --text: #f1ece5; --muted: #a9b8c0; --border: #1f444d;
-      --blue: #8fb0ff; --blue-soft: #14305c; --red: #ff8a82; --red-soft: #3a1b19; --amber: #f0a13a; --amber-soft: #3a2b10;
-      --green: #6fd08d; --green-soft: #16301f; --header: #123840;
-      --hero-bg: #0e2e35; --hero-border: rgba(255,255,255,.18);
-    }
-  }
+  /* Light by default, like Unimicro itself. Dark only when the visitor presses the toggle. */
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --bg: #071b20; --card: #0e2e35; --text: #f1ece5; --muted: #a9b8c0; --border: #1f444d;
     --blue: #8fb0ff; --blue-soft: #14305c; --red: #ff8a82; --red-soft: #3a1b19; --amber: #f0a13a; --amber-soft: #3a2b10;
     --green: #6fd08d; --green-soft: #16301f; --header: #123840;
@@ -311,7 +305,7 @@ console.log('%cBonjour Hei!%c\nYou opened the developer tools on a page made by 
 
   // ---- theme ---------------------------------------------------------------------------------------
   const root = document.documentElement, tb = el('themeToggle');
-  const isDark = () => root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark = () => root.getAttribute('data-theme') === 'dark';
   const setTheme = (th) => { if (th) root.setAttribute('data-theme', th); else root.removeAttribute('data-theme'); tb.textContent = isDark() ? t('themeLight') : t('themeDark'); try { localStorage.setItem('theme', th || ''); } catch {} };
   let savedTheme = ''; try { savedTheme = localStorage.getItem('theme') || ''; } catch {}
   tb.onclick = () => setTheme(isDark() ? 'light' : 'dark');
