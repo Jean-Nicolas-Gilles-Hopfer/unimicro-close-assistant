@@ -79,7 +79,9 @@
   .problems h3::before { counter-increment: p; content: counter(p) ". "; color: var(--blue); }
   .wide { grid-column: 1 / -1; }
   footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 2rem 1rem 3rem; border-top: 1px solid var(--border); }
-  .toggle { position: fixed; right: 16px; bottom: 16px; }
+  /* The theme pill shows the opposite of the current theme, so it stands out on the page. */
+  .toggle { position: fixed; right: 16px; bottom: 16px; background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 2px 10px rgba(9, 35, 41, .25); }
+  :root[data-theme="dark"] .toggle { background: #f1ece5; color: var(--ink); border-color: #f1ece5; box-shadow: 0 2px 10px rgba(0, 0, 0, .45); }
   .shots { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
   .shots figure, figure.shot { margin: 0; }
   .shots img, figure.shot img { width: 100%; border: 1px solid var(--border); border-radius: 8px; display: block; cursor: zoom-in; }
