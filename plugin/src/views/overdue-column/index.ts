@@ -5,6 +5,8 @@ import { daysBetween } from '../../lib/domain/aging';
 import { STEP_LABEL, today } from '../../lib/data';
 
 const OPEN = new Set([42002, 42003, 42005, 42007]);
+// Short step names so the tag fits the column (the full names are used in the page and headers).
+const SHORT: Record<string, string> = { friendly_reminder: 'Påminnelse', reminder_with_fee: 'Purring', debt_collection_notice: 'Inkassovarsel', send_to_collection: 'Til inkasso' };
 
 /** Invoice list column: days overdue as a coloured tag, from the row's own fields (no extra requests). */
 export default class OverdueColumnView extends LitElement {
@@ -41,7 +43,7 @@ export default class OverdueColumnView extends LitElement {
         const days = daysBetween(due, today());
         if (days <= 0) { this.text = days === 0 ? 'I dag' : `${-days} d igjen`; this.type = 'success'; return; }
         const step = days <= 14 ? 'friendly_reminder' : days <= 28 ? 'reminder_with_fee' : days <= 42 ? 'debt_collection_notice' : 'send_to_collection';
-        this.text = `${days} d · ${STEP_LABEL[step].text}`;
+        this.text = `${days} d · ${SHORT[step]}`;
         this.type = STEP_LABEL[step].type;
     }
 

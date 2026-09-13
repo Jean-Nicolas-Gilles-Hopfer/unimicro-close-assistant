@@ -70,7 +70,7 @@
           "StatusCode"
         ],
         "sortField": "PaymentDueDate",
-        "width": "180px"
+        "width": "200px"
       },
       "placement": {
         "appfrontend": {
