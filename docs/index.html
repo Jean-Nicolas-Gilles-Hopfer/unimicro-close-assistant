@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Close Assistant for Unimicro</title>
-<meta name="description" content="Månedsavslutning uten detektivarbeid: purring med hodet, likviditet du kan stole på, og en revisjonssjekk som forklarer seg. Unimicro Hackathon 2026.">
+<meta name="description" content="Month-end close without detective work: smarter dunning, a cash forecast you can trust, and a revision check that explains itself. Unimicro Hackathon 2026.">
 <style>
   :root {
     color-scheme: light dark;
@@ -27,28 +27,35 @@
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 Inter, "Segoe UI", system-ui, sans-serif; }
   a { color: var(--blue); }
-  header.hero { padding: 3.5rem 1.5rem 2.5rem; text-align: center; border-bottom: 1px solid var(--border); background: var(--card); }
+  header.hero { padding: 3.5rem 1.5rem 2.5rem; text-align: center; border-bottom: 1px solid var(--border); background: var(--card); position: relative; }
   .hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin: 0 0 .5rem; letter-spacing: -.01em; }
   .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 46rem; margin: 0 auto 1.25rem; }
   .hero .cta { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
-  .btn { display: inline-block; padding: .6rem 1.1rem; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: var(--card); font-weight: 500; }
+  .btn { display: inline-block; padding: .6rem 1.1rem; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: var(--card); font-weight: 500; cursor: pointer; font: inherit; }
   .btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .lang { position: absolute; top: 14px; right: 16px; display: inline-flex; border: 1px solid var(--border); border-radius: 99px; overflow: hidden; background: var(--bg); }
+  .lang button { border: 0; background: transparent; color: var(--muted); padding: .35rem .8rem; cursor: pointer; font: inherit; font-size: .85rem; font-weight: 600; }
+  .lang button[aria-pressed="true"] { background: var(--blue); color: #fff; }
   main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
   section { margin: 2.5rem 0; }
   h2 { font-size: 1.5rem; margin: 0 0 .25rem; }
   h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
   p.sub { color: var(--muted); margin: 0 0 1rem; }
   .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.15rem; }
+  .two { display: grid; gap: 1rem; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.7fr); margin-top: 1rem; }
+  @media (max-width: 820px) { .two { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.15rem; min-width: 0; }
   .kpis { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
   .kpi .label { color: var(--muted); font-size: .85rem; }
   .kpi .value { font-size: 1.45rem; font-weight: 600; margin: .15rem 0; white-space: nowrap; }
   .kpi .note { color: var(--muted); font-size: .8rem; }
   .red { color: var(--red); } .amber { color: var(--amber); } .green { color: var(--green); }
+  .scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: .92rem; }
-  th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--border); }
-  th { background: var(--header); font-weight: 600; }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  th { background: var(--header); font-weight: 600; white-space: nowrap; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.tagcell { white-space: nowrap; }
   .tag { display: inline-block; padding: .1rem .55rem; border-radius: 99px; font-size: .78rem; border: 1px solid var(--border); white-space: nowrap; }
   .tag.critical { background: var(--red-soft); color: var(--red); border-color: var(--red); }
   .tag.warning { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
@@ -67,81 +74,84 @@
   footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 2rem 1rem 3rem; border-top: 1px solid var(--border); }
   .toggle { position: fixed; right: 16px; bottom: 16px; }
   .shots { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .shots figure { margin: 0; }
-  .shots img { width: 100%; border: 1px solid var(--border); border-radius: 8px; display: block; }
-  .shots figcaption { font-size: .85rem; color: var(--muted); margin-top: .35rem; }
+  .shots figure, figure.shot { margin: 0; }
+  .shots img, figure.shot img { width: 100%; border: 1px solid var(--border); border-radius: 8px; display: block; cursor: zoom-in; }
+  .shots figcaption, figure.shot figcaption { font-size: .85rem; color: var(--muted); margin-top: .35rem; }
+  figure.shot + figure.shot { margin-top: 1rem; }
   .video { aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: 10px; background: var(--header); }
   .muted { color: var(--muted); }
-  @media (max-width: 700px) { .kpi .value { font-size: 1.2rem; } }
+  /* lightbox */
+  .lightbox { position: fixed; inset: 0; background: rgba(8, 10, 12, .92); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; padding: 2rem; cursor: zoom-out; }
+  .lightbox[open] { display: flex; }
+  .lightbox img { max-width: 100%; max-height: calc(100vh - 6rem); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+  .lightbox figcaption { color: #e8eaed; margin-top: .75rem; font-size: .95rem; text-align: center; }
+  .lightbox .nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.12); color: #fff; border: 0; width: 44px; height: 44px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; }
+  .lightbox .prev { left: 16px; } .lightbox .next { right: 16px; }
+  .lightbox .close { position: absolute; top: 14px; right: 18px; background: transparent; border: 0; color: #fff; font-size: 1.8rem; cursor: pointer; }
+  @media (max-width: 700px) { .kpi .value { font-size: 1.2rem; } .lang { position: static; margin-bottom: 1rem; } }
 </style>
 </head>
 <body>
 <header class="hero">
+  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="nb">NO</button><button type="button" data-lang="en">EN</button></div>
   <h1>Close Assistant for Unimicro</h1>
-  <p class="lead">Månedsavslutning uten detektivarbeid. Hvem skal jeg purre? Hvor mye penger har vi egentlig? Hvorfor er revisjonssjekken rød? Svarene, rett inne i Unimicro.</p>
+  <p class="lead" data-i18n="lead"></p>
   <div class="cta">
-    <a class="btn primary" href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant">Kildekode på GitHub</a>
-    <a class="btn" href="#demo">Se tallene</a>
-    <a class="btn" href="#video">Video</a>
-    <a class="btn" href="#dark">Bonus: mørk modus</a>
+    <a class="btn primary" href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant" data-i18n="ctaCode"></a>
+    <a class="btn" href="#demo" data-i18n="ctaNumbers"></a>
+    <a class="btn" href="#video" data-i18n="ctaVideo"></a>
+    <a class="btn" href="#dark" data-i18n="ctaDark"></a>
   </div>
-  <p class="muted" style="margin-top:1rem;font-size:.85rem">Unimicro Hackathon 2026 · Jean-Nicolas Gilles Hopfer · bygget med Claude</p>
+  <p class="muted" style="margin-top:1rem;font-size:.85rem" data-i18n="byline"></p>
 </header>
 
 <main>
   <section>
-    <h2>Tre problemer, ett tillegg</h2>
-    <p class="sub">Alt leses som innlogget bruker via Unimicros API. Ingenting bokføres uten Unimicros egen bekreftelse.</p>
+    <h2 data-i18n="p.h"></h2>
+    <p class="sub" data-i18n="p.sub"></p>
     <div class="grid problems">
-      <div class="card">
-        <h3>Purring med hodet</h3>
-        <p>Åpne fakturaer aldersfordeles og kundene rangeres etter det som <em>faktisk</em> er forfalt: innbetalinger som aldri ble koblet til en faktura trekkes fra først. I demoselskapet lå det 5,3 millioner slik. Neste steg foreslås etter norsk praksis, og ett klikk lager purreteksten med Unimicros egen tekstgenerator.</p>
-      </div>
-      <div class="card">
-        <h3>Likviditet du kan stole på</h3>
-        <p>13-ukers prognose fra banksaldo, åpne kunde- og leverandørfakturaer og faste kostnader. Forutsetningene står i klartekst, og laveste punkt er markert. Penger som allerede er mottatt telles ikke som fremtidig innbetaling.</p>
-      </div>
-      <div class="card">
-        <h3>Revisjonssjekk som forklarer seg</h3>
-        <p>Samme kontroller som Unimicros revisjonssjekk, pluss to egne (umatchede innbetalinger, mva-melding). For hver feil: årsak, hvordan du sjekker, og det balanserte korreksjonsbilaget, i riktig rekkefølge.</p>
-      </div>
+      <div class="card"><h3 data-i18n="p1.h"></h3><p data-i18n-html="p1.t"></p></div>
+      <div class="card"><h3 data-i18n="p2.h"></h3><p data-i18n="p2.t"></p></div>
+      <div class="card"><h3 data-i18n="p3.h"></h3><p data-i18n="p3.t"></p></div>
     </div>
   </section>
 
   <section id="where">
-    <h2>Der regnskapsføreren allerede er</h2>
-    <p class="sub">Én plugin, fem flater: side under Salg, widget på dashbordet, merkelapp på faktura og kunde, kolonne i fakturalisten. Samme logikk finnes også som MCP-server for Claude og andre AI-assistenter.</p>
+    <h2 data-i18n="w.h"></h2>
+    <p class="sub" data-i18n="w.sub"></p>
     <div class="shots" id="shots"></div>
   </section>
 
   <section id="demo">
-    <h2>Tallene fra demoselskapet</h2>
-    <p class="sub" id="captured">Øyeblikksbilde fra Unimicros testmiljø.</p>
+    <h2 data-i18n="d.h"></h2>
+    <p class="sub" id="captured"></p>
     <div class="kpis" id="kpis"></div>
-    <div class="grid" style="margin-top:1rem">
+    <div class="two">
       <div class="card">
-        <h3>Aldersfordeling (brutto)</h3>
+        <h3 data-i18n="d.aging"></h3>
         <div class="bar" id="agebar"></div>
         <table id="agetable"></table>
         <p class="sub" id="agenote" style="margin-top:.75rem"></p>
       </div>
       <div class="card">
-        <h3>Kunder å følge opp først</h3>
-        <table id="chase"></table>
+        <h3 data-i18n="d.chase"></h3>
+        <div class="scroll"><table id="chase"></table></div>
       </div>
+    </div>
+    <div class="grid" style="margin-top:1rem">
       <div class="card wide">
-        <h3>Revisjonssjekk</h3>
+        <h3 data-i18n="d.rev"></h3>
         <p class="sub" id="revsum"></p>
         <div id="revision"></div>
       </div>
       <div class="card wide">
-        <h3>Likviditetsprognose, 13 uker</h3>
-        <table id="forecast"></table>
-        <details id="assumptions"><summary>Forutsetninger</summary><ul></ul></details>
+        <h3 data-i18n="d.fc"></h3>
+        <div class="scroll"><table id="forecast"></table></div>
+        <details id="assumptions"><summary data-i18n="d.assume"></summary><ul></ul></details>
       </div>
       <div class="card wide">
-        <h3>Purretekst, skrevet av Unimicros tekstgenerator</h3>
-        <p class="sub">Eksempel på det ett klikk gir, med de reelle beløpene etter matching.</p>
+        <h3 data-i18n="d.rem"></h3>
+        <p class="sub" data-i18n="d.remsub"></p>
         <div id="reminder"></div>
       </div>
     </div>
@@ -149,92 +159,219 @@
 
   <section id="video">
     <h2>Video</h2>
-    <p class="sub">Under ett minutt.</p>
-    <div id="videobox"><p class="muted">Videoen legges inn før innlevering.</p></div>
+    <p class="sub" data-i18n="v.sub"></p>
+    <div id="videobox"><p class="muted" data-i18n="v.pending"></p></div>
   </section>
 
   <section id="dark">
-    <h2>Bonus: mørk modus for Unimicro</h2>
+    <h2 data-i18n="k.h"></h2>
     <div class="grid">
       <div class="card">
-        <p>Unimicro har ikke mørk modus, men designsystemet er bygget for det: hver farge er et navngitt token. Vi laget et komplett mørkt tema i samme format som merkevaretemaene for DNB, SpareBank 1, Eika og Azets, kontrastsjekket mot WCAG AA, og en liten nettleserutvidelse med lys/mørk-bryter som viser det live.</p>
-        <p><a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant/tree/main/theme">Temaet, kontrastsjekken og utvidelsen</a> · De få stedene appen bruker hardkodede farger er dokumentert som det Unimicro selv må rette.</p>
+        <p data-i18n="k.t1"></p>
+        <p><a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant/tree/main/theme" data-i18n="k.link"></a> · <span data-i18n="k.t2"></span></p>
       </div>
-      <div class="card"><figure style="margin:0" id="darkshot"><p class="muted">Skjermbilde legges inn.</p></figure></div>
+      <div class="card" id="darkshot"><p class="muted" data-i18n="k.pending"></p></div>
     </div>
   </section>
 
   <section id="how">
-    <h2>Slik er det bygget</h2>
+    <h2 data-i18n="h.h"></h2>
     <div class="grid">
-      <div class="card"><h3>Plugin</h3><p>Unimicros plugin-plattform (Lit, native visninger, designsystemets komponenter og tokens). Data via <code>host.api</code> og statistikk-endepunktet. Ingen egen backend.</p></div>
-      <div class="card"><h3>Delt domenelogikk</h3><p>Aldersfordeling, purretrinn, prognose og revisjonsforklaringer er ren TypeScript med enhetstester, brukt både av pluginen og MCP-serveren.</p></div>
-      <div class="card"><h3>MCP-server</h3><p>Samme verktøy for Claude og andre assistenter: REST + statistikk, og Unimicros egen MCP for bokføring med bekreftelse.</p></div>
+      <div class="card"><h3>Plugin</h3><p data-i18n-html="h.plugin"></p></div>
+      <div class="card"><h3 data-i18n="h.domain.h"></h3><p data-i18n="h.domain"></p></div>
+      <div class="card"><h3 data-i18n="h.mcp.h"></h3><p data-i18n="h.mcp"></p></div>
     </div>
   </section>
 </main>
 
 <footer>Close Assistant · Unimicro Hackathon 2026 · <a href="https://github.com/Jean-Nicolas-Gilles-Hopfer/unimicro-close-assistant">GitHub</a></footer>
-<button class="btn toggle" id="themeToggle" type="button">☾ Mørk</button>
+<button class="btn toggle" id="themeToggle" type="button"></button>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="close" type="button" aria-label="Close">×</button>
+  <button class="nav prev" type="button" aria-label="Previous">‹</button>
+  <figure style="margin:0;display:flex;flex-direction:column;align-items:center"><img alt=""><figcaption></figcaption></figure>
+  <button class="nav next" type="button" aria-label="Next">›</button>
+</div>
 
 <script>
 (async () => {
-  const nok = (n) => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(n);
-  const STEP = { none: ['Ikke forfalt','success'], friendly_reminder: ['Vennlig påminnelse','info'], reminder_with_fee: ['Purring','warning'], debt_collection_notice: ['Inkassovarsel','critical'], send_to_collection: ['Til inkasso','critical'] };
-  const SECTION = { 'Opening balance total': 'Åpningsbalansen går ikke i null', 'Income statement opening balance': 'Resultatkontoer har inngående balanse', 'Receivables': 'Kundefordringer avviker fra reskontro', 'Liability accounts': 'Gjeldskonto med debetsaldo', 'Unmatched customer payments': 'Umatchede innbetalinger fra kunder', 'VAT returns': 'Mva-melding ikke levert' };
-  const BUCKET = { notDue: ['Ikke forfalt','#50b46f'], d1_30: ['1–30 dager','#9ccc3a'], d31_60: ['31–60 dager','#eb830a'], d61_90: ['61–90 dager','#f26a2a'], d90plus: ['Over 90 dager','#c7231b'] };
   const el = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-  // theme toggle
-  const root = document.documentElement, tb = el('themeToggle');
-  const setTheme = (t) => { if (t) root.setAttribute('data-theme', t); else root.removeAttribute('data-theme'); const dark = t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches); tb.textContent = dark ? '☀ Lys' : '☾ Mørk'; try { localStorage.setItem('theme', t || ''); } catch {} };
-  let saved = ''; try { saved = localStorage.getItem('theme') || ''; } catch {}
-  setTheme(saved);
-  tb.onclick = () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-
-  // screenshots: shown when the files exist
-  const shots = [
-    ['img/overview.png', 'Oversiktssiden under Salg'], ['img/widget.png', 'Widget på dashbordet'],
-    ['img/invoice-header.png', 'Merkelapp på fakturaen'], ['img/customer-header.png', 'Merkelapp på kunden'],
-    ['img/invoice-list.png', 'Kolonne i fakturalisten'], ['img/reminder.png', 'Purretekst på ett klikk'],
+  // ---- texts -------------------------------------------------------------------------------------------
+  const T = {
+    lead: { nb: 'Månedsavslutning uten detektivarbeid. Hvem skal jeg purre? Hvor mye penger har vi egentlig? Hvorfor er revisjonssjekken rød? Svarene, rett inne i Unimicro.',
+            en: 'Month-end close without detective work. Who should I chase? How much money do we actually have? Why is the revision check red? The answers, right inside Unimicro.' },
+    ctaCode: { nb: 'Kildekode på GitHub', en: 'Source code on GitHub' }, ctaNumbers: { nb: 'Se tallene', en: 'See the numbers' },
+    ctaVideo: { nb: 'Video', en: 'Video' }, ctaDark: { nb: 'Bonus: mørk modus', en: 'Bonus: dark mode' },
+    byline: { nb: 'Unimicro Hackathon 2026 · Jean-Nicolas Gilles Hopfer · bygget med Claude', en: 'Unimicro Hackathon 2026 · Jean-Nicolas Gilles Hopfer · built with Claude' },
+    'p.h': { nb: 'Tre problemer, ett tillegg', en: 'Three problems, one add-on' },
+    'p.sub': { nb: 'Alt leses som innlogget bruker via Unimicros API. Ingenting bokføres uten Unimicros egen bekreftelse.', en: 'Everything is read as the signed-in user through Unimicro\'s API. Nothing is posted without Unimicro\'s own confirmation.' },
+    'p1.h': { nb: 'Purring med hodet', en: 'Dunning with a brain' },
+    'p1.t': { nb: 'Åpne fakturaer aldersfordeles og kundene rangeres etter det som <em>faktisk</em> er forfalt: innbetalinger som aldri ble koblet til en faktura trekkes fra først. I demoselskapet lå det 5,3 millioner slik. Neste steg foreslås etter norsk praksis, og ett klikk lager purreteksten med Unimicros egen tekstgenerator.',
+              en: 'Open invoices are aged and customers ranked by what is <em>actually</em> overdue: payments that were never matched to an invoice are deducted first. The demo company had 5.3 million kroner sitting like that. The next step follows Norwegian practice, and one click drafts the reminder with Unimicro\'s own text generator.' },
+    'p2.h': { nb: 'Likviditet du kan stole på', en: 'Cash flow you can trust' },
+    'p2.t': { nb: '13-ukers prognose fra banksaldo, åpne kunde- og leverandørfakturaer og faste kostnader. Forutsetningene står i klartekst, og laveste punkt er markert. Penger som allerede er mottatt telles ikke som fremtidig innbetaling.',
+              en: 'A 13-week forecast from the bank balance, open customer and supplier invoices and fixed costs. The assumptions are spelled out and the low point is marked. Money already received is not counted as a future inflow.' },
+    'p3.h': { nb: 'Revisjonssjekk som forklarer seg', en: 'A revision check that explains itself' },
+    'p3.t': { nb: 'Samme kontroller som Unimicros revisjonssjekk, pluss to egne (umatchede innbetalinger, mva-melding). For hver feil: årsak, hvordan du sjekker, og det balanserte korreksjonsbilaget, i riktig rekkefølge.',
+              en: 'The same checks as Unimicro\'s revision check, plus two of our own (unmatched payments, VAT return). For every finding: the cause, how to verify it, and the balanced correcting entry, in the right order.' },
+    'w.h': { nb: 'Der regnskapsføreren allerede er', en: 'Where the accountant already works' },
+    'w.sub': { nb: 'Én plugin, fem flater: side under Salg, widget på dashbordet, merkelapp på faktura og kunde, kolonne i fakturalisten. Samme logikk finnes også som MCP-server for Claude og andre AI-assistenter.',
+               en: 'One plugin, five surfaces: a page under Sales, a dashboard widget, tags on the invoice and the customer, a column in the invoice list. The same logic also ships as an MCP server for Claude and other AI assistants.' },
+    'd.h': { nb: 'Tallene fra demoselskapet', en: 'The numbers from the demo company' },
+    'd.aging': { nb: 'Aldersfordeling (brutto)', en: 'Aging (gross)' }, 'd.chase': { nb: 'Kunder å følge opp først', en: 'Customers to follow up first' },
+    'd.rev': { nb: 'Revisjonssjekk', en: 'Revision check' }, 'd.fc': { nb: 'Likviditetsprognose, 13 uker', en: 'Cash-flow forecast, 13 weeks' }, 'd.assume': { nb: 'Forutsetninger', en: 'Assumptions' },
+    'd.rem': { nb: 'Purretekst, skrevet av Unimicros tekstgenerator', en: 'Reminder letter, written by Unimicro\'s text generator' },
+    'd.remsub': { nb: 'Eksempel på det ett klikk gir, med de reelle beløpene etter matching.', en: 'What one click produces, using the real amounts after matching. The letter is in Norwegian, as it would be sent.' },
+    'v.sub': { nb: 'Under ett minutt.', en: 'Under one minute.' }, 'v.pending': { nb: 'Videoen legges inn før innlevering.', en: 'The video is added before submission.' },
+    'k.h': { nb: 'Bonus: mørk modus for Unimicro', en: 'Bonus: dark mode for Unimicro' },
+    'k.t1': { nb: 'Unimicro har ikke mørk modus, men designsystemet er bygget for det: hver farge er et navngitt token. Vi laget et komplett mørkt tema i samme format som merkevaretemaene for DNB, SpareBank 1, Eika og Azets, kontrastsjekket mot WCAG AA, og en liten nettleserutvidelse med lys/mørk-bryter som viser det live.',
+              en: 'Unimicro has no dark mode, but the design system is built for one: every colour is a named token. We made a complete dark theme in the same format as the brand themes for DNB, SpareBank 1, Eika and Azets, contrast-checked against WCAG AA, and a small browser extension with a light/dark switch that shows it live.' },
+    'k.link': { nb: 'Temaet, kontrastsjekken og utvidelsen', en: 'The theme, the contrast check and the extension' },
+    'k.t2': { nb: 'De få stedene appen bruker hardkodede farger er dokumentert som det Unimicro selv må rette.', en: 'The few places where the app uses hard-coded colours are documented as what Unimicro itself would need to fix.' },
+    'k.pending': { nb: 'Skjermbilde legges inn.', en: 'Screenshot pending.' },
+    'k.cap1': { nb: 'Unimicro i mørk modus, med Close Assistant inni.', en: 'Unimicro in dark mode, with Close Assistant inside.' },
+    'k.cap2': { nb: 'Dashbordet i mørk modus. Diagrammer tegnes på canvas og beholder Unimicros lyse farger.', en: 'The dashboard in dark mode. Charts are drawn on canvas and keep Unimicro\'s light colours.' },
+    'h.h': { nb: 'Slik er det bygget', en: 'How it is built' },
+    'h.plugin': { nb: 'Unimicros plugin-plattform (Lit, native visninger, designsystemets komponenter og tokens). Data via <code>host.api</code> og statistikk-endepunktet. Ingen egen backend.',
+                  en: 'Unimicro\'s plugin platform (Lit, native views, the design system\'s components and tokens). Data through <code>host.api</code> and the statistics endpoint. No backend of its own.' },
+    'h.domain.h': { nb: 'Delt domenelogikk', en: 'Shared domain logic' },
+    'h.domain': { nb: 'Aldersfordeling, purretrinn, prognose og revisjonsforklaringer er ren TypeScript med enhetstester, brukt både av pluginen og MCP-serveren.', en: 'Aging, dunning steps, forecast and revision explanations are plain TypeScript with unit tests, used by both the plugin and the MCP server.' },
+    'h.mcp.h': { nb: 'MCP-server', en: 'MCP server' },
+    'h.mcp': { nb: 'Samme verktøy for Claude og andre assistenter: REST + statistikk, og Unimicros egen MCP for bokføring med bekreftelse.', en: 'The same tools for Claude and other assistants: REST + statistics, and Unimicro\'s own MCP for posting with confirmation.' },
+    // dynamic
+    kBank: { nb: 'Bank og kontanter', en: 'Bank and cash' }, kAcc: { nb: 'konto', en: 'account' },
+    kAR: { nb: 'Utestående kundefordringer', en: 'Open receivables' },
+    kARnote: { nb: (n, t, c) => `${n} åpne fakturaer ${t}, minus umatchede innbetalinger ${c}`, en: (n, t, c) => `${n} open invoices ${t}, minus unmatched payments ${c}` },
+    kOverdue: { nb: 'Reelt forfalt', en: 'Really overdue' }, kChase: { nb: (a, b) => `${a} av ${b} kunder å purre`, en: (a, b) => `${a} of ${b} customers to chase` },
+    kCredits: { nb: 'Umatchede innbetalinger', en: 'Unmatched payments' }, kOverpaid: { nb: (n) => `${n} kunder har betalt mer enn de skylder`, en: (n) => `${n} customers have paid more than they owe` },
+    kLow: { nb: 'Laveste likviditet, 13 uker', en: 'Lowest cash, 13 weeks' }, kWeek: { nb: 'uke fra', en: 'week of' },
+    thAge: { nb: 'Alder', en: 'Age' }, thAmount: { nb: 'Beløp', en: 'Amount' }, thCustomer: { nb: 'Kunde', en: 'Customer' }, thNet: { nb: 'Reelt forfalt', en: 'Really overdue' },
+    thOldest: { nb: 'Eldste', en: 'Oldest' }, thStep: { nb: 'Neste steg', en: 'Next step' }, days: { nb: 'd', en: 'd' },
+    ageNote: { nb: (g, n) => `Brutto ${g}. Etter matching av innbetalinger er ${n} reelt forfalt.`, en: (g, n) => `Gross ${g}. After matching payments, ${n} is really overdue.` },
+    revSum: { nb: (e, w, y) => `${e} feil, ${w} ${w === 1 ? 'advarsel' : 'advarsler'} for ${y}. Rekkefølgen er valgt slik at rotårsaken kommer først.`, en: (e, w, y) => `${e} ${e === 1 ? 'error' : 'errors'}, ${w} ${w === 1 ? 'warning' : 'warnings'} for ${y}. Ordered so the root cause comes first.` },
+    sevError: { nb: 'Feil', en: 'Error' }, sevWarn: { nb: 'Advarsel', en: 'Warning' }, sevInfo: { nb: 'Info', en: 'Info' },
+    causes: { nb: 'Sannsynlige årsaker', en: 'Likely causes' }, check: { nb: 'Slik sjekker du', en: 'How to check' }, proposal: { nb: 'Forslag', en: 'Proposal' },
+    thAccount: { nb: 'Konto', en: 'Account' }, thText: { nb: 'Tekst', en: 'Text' }, thDate: { nb: 'Dato', en: 'Date' },
+    fcWeek: { nb: 'Uke fra', en: 'Week of' }, fcIn: { nb: 'Inn (kunder)', en: 'In (customers)' }, fcOut: { nb: 'Ut (leverandører)', en: 'Out (suppliers)' }, fcFixed: { nb: 'Faste kostnader', en: 'Fixed costs' }, fcBal: { nb: 'Saldo', en: 'Balance' },
+    fcExtra: { nb: 'Innbetalinger som ikke er koblet til faktura er trukket fra de eldste fakturaene først.', en: 'Payments not matched to an invoice are deducted from the oldest invoices first.' },
+    remLine: { nb: 'reelt forfalt', en: 'really overdue' }, remTemplate: { nb: '(mal)', en: '(template)' },
+    captured: { nb: (c, t) => `Øyeblikksbilde fra ${c}, hentet ${t}.`, en: (c, t) => `Snapshot from ${c}, captured ${t}.` },
+    loadFail: { nb: 'Kunne ikke laste øyeblikksbildet.', en: 'Could not load the snapshot.' },
+    themeDark: { nb: '☾ Mørk', en: '☾ Dark' }, themeLight: { nb: '☀ Lys', en: '☀ Light' },
+  };
+  const STEP = { none: { nb: 'Ikke forfalt', en: 'Not due', cls: 'success' }, friendly_reminder: { nb: 'Vennlig påminnelse', en: 'Friendly reminder', cls: 'info' }, reminder_with_fee: { nb: 'Purring', en: 'Reminder with fee', cls: 'warning' }, debt_collection_notice: { nb: 'Inkassovarsel', en: 'Collection notice', cls: 'critical' }, send_to_collection: { nb: 'Til inkasso', en: 'Send to collection', cls: 'critical' } };
+  const SECTION = { 'Opening balance total': { nb: 'Åpningsbalansen går ikke i null', en: 'Opening balance does not net to zero' }, 'Income statement opening balance': { nb: 'Resultatkontoer har inngående balanse', en: 'Income statement accounts carry an opening balance' }, 'Receivables': { nb: 'Kundefordringer avviker fra reskontro', en: 'Receivables differ from the sub-ledger' }, 'Liability accounts': { nb: 'Gjeldskonto med debetsaldo', en: 'Liability account with a debit balance' }, 'Unmatched customer payments': { nb: 'Umatchede innbetalinger fra kunder', en: 'Unmatched customer payments' }, 'VAT returns': { nb: 'Mva-melding ikke levert', en: 'VAT return not filed' } };
+  const BUCKET = { notDue: { nb: 'Ikke forfalt', en: 'Not due', c: '#50b46f' }, d1_30: { nb: '1–30 dager', en: '1–30 days', c: '#9ccc3a' }, d31_60: { nb: '31–60 dager', en: '31–60 days', c: '#eb830a' }, d61_90: { nb: '61–90 dager', en: '61–90 days', c: '#f26a2a' }, d90plus: { nb: 'Over 90 dager', en: 'Over 90 days', c: '#c7231b' } };
+  const SHOTS = [
+    ['img/overview.png', { nb: 'Oversiktssiden under Salg', en: 'The overview page under Sales' }], ['img/widget.png', { nb: 'Widget på dashbordet', en: 'Dashboard widget' }],
+    ['img/invoice-header.png', { nb: 'Merkelapp på fakturaen', en: 'Tag on the invoice' }], ['img/customer-header.png', { nb: 'Merkelapp på kunden', en: 'Tag on the customer' }],
+    ['img/invoice-list.png', { nb: 'Kolonne i fakturalisten', en: 'Column in the invoice list' }], ['img/reminder.png', { nb: 'Purretekst på ett klikk', en: 'Reminder letter in one click' }],
   ];
-  for (const [src, cap] of shots) { const img = new Image(); img.onload = () => { const f = document.createElement('figure'); f.innerHTML = `<a href="${src}" target="_blank" rel="noopener" title="Åpne i full størrelse"><img src="${src}" alt="${esc(cap)}"></a><figcaption>${esc(cap)}</figcaption>`; el('shots').appendChild(f); }; img.src = src; }
-  const dark = new Image(); dark.onload = () => { el('darkshot').innerHTML = `<img src="img/dark-mode.png" alt="Unimicro i mørk modus" style="width:100%;border-radius:8px;border:1px solid var(--border)"><figcaption class="muted" style="font-size:.85rem">Unimicro i mørk modus, med Close Assistant inni.</figcaption>`; const d2 = new Image(); d2.onload = () => { el('darkshot').insertAdjacentHTML('beforeend', `<img src="img/dark-mode-dashboard.png" alt="Dashbordet i mørk modus" style="width:100%;border-radius:8px;border:1px solid var(--border);margin-top:1rem"><figcaption class="muted" style="font-size:.85rem">Dashbordet i mørk modus. Diagrammer tegnes på canvas og beholder Unimicros lyse farger.</figcaption>`); }; d2.src = 'img/dark-mode-dashboard.png'; }; dark.src = 'img/dark-mode.png';
+  // The forecast assumptions come from the engine in English; Norwegian is derived from the same templates.
+  const ASSUME_NB = [
+    [/^Receivables not yet due: (\d+)% collected in their due week\.$/, (m) => `Kundefordringer som ikke er forfalt: ${m[1]} % innbetalt i forfallsuken.`],
+    [/^Receivables 1-60 days overdue: (\d+)% collected within (\d+) weeks\.$/, (m) => `Kundefordringer 1–60 dager forfalt: ${m[1]} % innbetalt innen ${m[2]} uker.`],
+    [/^Receivables more than 60 days overdue: (\d+)% collected in week (\d+), rest excluded\.$/, (m) => `Kundefordringer forfalt mer enn 60 dager: ${m[1]} % innbetalt i uke ${m[2]}, resten utelatt.`],
+    [/^Supplier invoices paid in their due week; overdue ones in week (\d+)\.$/, (m) => `Leverandørfakturaer betales i forfallsuken; forfalte i uke ${m[1]}.`],
+    [/^Fixed costs ([\d.]+)\/month spread evenly per week\.$/, (m) => `Faste kostnader ${new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 2 }).format(Number(m[1]))} kr/måned fordelt likt per uke.`],
+  ];
 
-  let d; try { d = await (await fetch('data/snapshot.json')).json(); } catch { el('kpis').innerHTML = '<p class="muted">Kunne ikke laste øyeblikksbildet.</p>'; return; }
-  el('captured').textContent = `Øyeblikksbilde fra ${d.company}, hentet ${new Date(d.capturedAt).toLocaleString('nb-NO')}.`;
-  const a = d.aging, f = d.forecast, r = d.revision;
-  const bank = f.inputs.bankAccounts.reduce((s, x) => s + x.balance, 0);
-  el('kpis').innerHTML = [
-    ['Bank og kontanter', nok(bank), 'konto ' + f.inputs.bankAccounts.map(x => x.accountNumber).join(', '), ''],
-    ['Utestående kundefordringer', nok(a.netTotal), `${a.invoiceCount} åpne fakturaer ${nok(a.total)}, minus umatchede innbetalinger ${nok(-a.credits)}`, ''],
-    ['Reelt forfalt', nok(a.netOverdue), `${a.toChaseCount ?? a.counterparts.filter(c => c.netOverdue > 0).length} av ${a.customerCount} kunder å purre`, 'red'],
-    ['Umatchede innbetalinger', nok(-a.credits), `${a.overpaidCount} kunder har betalt mer enn de skylder`, 'amber'],
-    ['Laveste likviditet, 13 uker', nok(f.lowestClosing.amount), 'uke fra ' + f.lowestClosing.weekStart, f.lowestClosing.amount < 0 ? 'red' : ''],
-  ].map(([l, v, n, c]) => `<div class="card kpi"><div class="label">${l}</div><div class="value ${c}">${v}</div><div class="note">${n}</div></div>`).join('');
+  // ---- language -------------------------------------------------------------------------------------
+  let lang = 'nb';
+  const qs = new URLSearchParams(location.search).get('lang');
+  if (qs === 'en' || qs === 'nb') lang = qs;
+  else { let s = ''; try { s = localStorage.getItem('lang') || ''; } catch {} lang = s || (/^(nb|no|nn)/i.test(navigator.language) ? 'nb' : 'en'); }
+  const t = (k, ...a) => { const v = T[k]?.[lang]; return typeof v === 'function' ? v(...a) : (v ?? k); };
+  const nok = (n) => new Intl.NumberFormat(lang === 'nb' ? 'nb-NO' : 'en-GB', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(n);
+  const applyStatic = () => {
+    document.documentElement.lang = lang === 'nb' ? 'no' : 'en';
+    for (const n of document.querySelectorAll('[data-i18n]')) n.textContent = t(n.dataset.i18n);
+    for (const n of document.querySelectorAll('[data-i18n-html]')) n.innerHTML = t(n.dataset.i18nHtml);
+    for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+  };
+  for (const b of document.querySelectorAll('.lang button')) b.onclick = () => { lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch {} render(); };
 
-  const total = Object.values(a.buckets).reduce((s, x) => s + x, 0);
-  el('agebar').innerHTML = Object.entries(a.buckets).filter(([, v]) => v > 0).map(([k, v]) => `<div style="flex:${v};background:${BUCKET[k][1]}" title="${BUCKET[k][0]}: ${nok(v)}"></div>`).join('');
-  el('agetable').innerHTML = '<tr><th>Alder</th><th class="num">Beløp</th></tr>' + Object.entries(a.buckets).map(([k, v]) => `<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BUCKET[k][1]};margin-right:.5rem"></span>${BUCKET[k][0]}</td><td class="num">${nok(v)}</td></tr>`).join('');
-  el('agenote').textContent = `Brutto ${nok(total)}. Etter matching av innbetalinger er ${nok(a.netOverdue)} reelt forfalt.`;
+  // ---- theme ---------------------------------------------------------------------------------------
+  const root = document.documentElement, tb = el('themeToggle');
+  const isDark = () => root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  const setTheme = (th) => { if (th) root.setAttribute('data-theme', th); else root.removeAttribute('data-theme'); tb.textContent = isDark() ? t('themeLight') : t('themeDark'); try { localStorage.setItem('theme', th || ''); } catch {} };
+  let savedTheme = ''; try { savedTheme = localStorage.getItem('theme') || ''; } catch {}
+  tb.onclick = () => setTheme(isDark() ? 'light' : 'dark');
 
-  el('chase').innerHTML = '<tr><th>Kunde</th><th class="num">Reelt forfalt</th><th class="num">Eldste</th><th>Neste steg</th></tr>' +
-    a.counterparts.filter(c => c.netOverdue > 0).slice(0, 8).map(c => { const [t, cls] = STEP[c.suggestedStep.step]; return `<tr><td>${esc(c.counterpartName)}</td><td class="num">${nok(c.netOverdue)}</td><td class="num">${c.oldestDaysOverdue} d</td><td><span class="tag ${cls}">${t}</span></td></tr>`; }).join('');
+  // ---- lightbox ------------------------------------------------------------------------------------
+  const gallery = []; // [src, captionKeyOrObj]
+  const lb = el('lightbox'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('figcaption');
+  let lbIndex = 0;
+  const showLb = (i) => { lbIndex = (i + gallery.length) % gallery.length; const [src, cap] = gallery[lbIndex]; lbImg.src = src; lbImg.alt = cap[lang]; lbCap.textContent = cap[lang]; lb.setAttribute('open', ''); document.body.style.overflow = 'hidden'; };
+  const hideLb = () => { lb.removeAttribute('open'); document.body.style.overflow = ''; };
+  lb.onclick = (e) => { if (e.target === lb || e.target.classList.contains('close')) hideLb(); };
+  lb.querySelector('.prev').onclick = (e) => { e.stopPropagation(); showLb(lbIndex - 1); };
+  lb.querySelector('.next').onclick = (e) => { e.stopPropagation(); showLb(lbIndex + 1); };
+  document.addEventListener('keydown', (e) => { if (!lb.hasAttribute('open')) return; if (e.key === 'Escape') hideLb(); if (e.key === 'ArrowLeft') showLb(lbIndex - 1); if (e.key === 'ArrowRight') showLb(lbIndex + 1); });
+  const figure = (src, cap, cls = '') => { const f = document.createElement('figure'); f.className = cls; const idx = gallery.push([src, cap]) - 1; f.innerHTML = `<img src="${src}" alt="${esc(cap[lang])}"><figcaption>${esc(cap[lang])}</figcaption>`; f.querySelector('img').onclick = () => showLb(idx); f.dataset.idx = idx; return f; };
+  const loaded = {};
+  const shotsReady = SHOTS.map(([src, cap]) => new Promise((res) => { const im = new Image(); im.onload = () => { loaded[src] = true; res(); }; im.onerror = () => res(); im.src = src; }));
+  const darkReady = ['img/dark-mode.png', 'img/dark-mode-dashboard.png'].map((src) => new Promise((res) => { const im = new Image(); im.onload = () => { loaded[src] = true; res(); }; im.onerror = () => res(); im.src = src; }));
 
-  el('revsum').textContent = `${r.errorCount} feil, ${r.warningCount} ${r.warningCount === 1 ? 'advarsel' : 'advarsler'} for ${r.year}. Rekkefølgen er valgt slik at rotårsaken kommer først.`;
-  el('revision').innerHTML = r.remediations.map(m => {
-    const sev = m.severity === 'error' ? ['Feil', 'critical'] : m.severity === 'warning' ? ['Advarsel', 'warning'] : ['Info', 'info'];
-    const entries = m.proposedEntries.map(e => `<p><strong>Forslag: ${esc(e.title)}</strong></p>` + (e.lines.length ? `<table><tr><th>Konto</th><th class="num">Beløp</th><th>Tekst</th><th>Dato</th></tr>${e.lines.map(l => `<tr><td>${l.accountNumber}</td><td class="num">${nok(l.amount)}</td><td>${esc(l.description)}</td><td>${l.financialDate}</td></tr>`).join('')}</table>` : '') + `<p class="muted">${esc(e.caution)}</p>`).join('');
-    return `<details><summary><span class="tag ${sev[1]}">${sev[0]}</span> ${esc(SECTION[m.section] || m.section)}${m.finding.accountNumber ? ` (konto ${m.finding.accountNumber})` : ''} – ${nok(Math.abs(m.finding.value))}</summary><p>${esc(m.explanation)}</p><p><strong>Sannsynlige årsaker</strong></p><ul>${m.likelyCauses.map(c => `<li>${esc(c)}</li>`).join('')}</ul><p><strong>Slik sjekker du</strong></p><ul>${m.diagnostics.map(c => `<li>${esc(c)}</li>`).join('')}</ul>${entries}</details>`;
-  }).join('');
+  // ---- data ------------------------------------------------------------------------------------------
+  let d = null;
+  try { d = await (await fetch('data/snapshot.json')).json(); } catch {}
+  await Promise.all([...shotsReady, ...darkReady]);
 
-  el('forecast').innerHTML = '<tr><th>Uke fra</th><th class="num">Inn (kunder)</th><th class="num">Ut (leverandører)</th><th class="num">Faste kostnader</th><th class="num">Saldo</th></tr>' +
-    f.weeks.map(w => `<tr><td>${w.weekStart}</td><td class="num">${nok(w.inflowsAR)}</td><td class="num">${nok(w.outflowsAP)}</td><td class="num">${nok(w.outflowsFixed)}</td><td class="num ${w.closing < 0 ? 'red' : ''}">${nok(w.closing)}</td></tr>`).join('');
-  el('assumptions').querySelector('ul').innerHTML = f.assumptions.map(x => `<li>${esc(x)}</li>`).join('') + `<li>Innbetalinger som ikke er koblet til faktura er trukket fra de eldste fakturaene først.</li>`;
+  function render() {
+    applyStatic();
+    setTheme(savedTheme = root.getAttribute('data-theme') || savedTheme);
+    gallery.length = 0;
+    el('shots').innerHTML = '';
+    for (const [src, cap] of SHOTS) if (loaded[src]) el('shots').appendChild(figure(src, cap));
+    if (loaded['img/dark-mode.png']) {
+      el('darkshot').innerHTML = '';
+      el('darkshot').appendChild(figure('img/dark-mode.png', { nb: T['k.cap1'].nb, en: T['k.cap1'].en }, 'shot'));
+      if (loaded['img/dark-mode-dashboard.png']) el('darkshot').appendChild(figure('img/dark-mode-dashboard.png', { nb: T['k.cap2'].nb, en: T['k.cap2'].en }, 'shot'));
+    }
+    if (!d) { el('kpis').innerHTML = `<p class="muted">${t('loadFail')}</p>`; return; }
 
-  const dr = d.reminders.drafts[0];
-  if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong>${dr.source === 'ai-generate' ? '' : ' <span class="muted">(mal)</span>'} · reelt forfalt ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step][1]}">${STEP[dr.step][0]}</span></p><pre>${esc(dr.text)}</pre>`;
+    const a = d.aging, f = d.forecast, r = d.revision;
+    el('captured').textContent = t('captured', d.company, new Date(d.capturedAt).toLocaleString(lang === 'nb' ? 'nb-NO' : 'en-GB'));
+    const bank = f.inputs.bankAccounts.reduce((s, x) => s + x.balance, 0);
+    const chase = a.toChaseCount ?? a.counterparts.filter((c) => c.netOverdue > 0).length;
+    el('kpis').innerHTML = [
+      [t('kBank'), nok(bank), t('kAcc') + ' ' + f.inputs.bankAccounts.map((x) => x.accountNumber).join(', '), ''],
+      [t('kAR'), nok(a.netTotal), t('kARnote', a.invoiceCount, nok(a.total), nok(-a.credits)), ''],
+      [t('kOverdue'), nok(a.netOverdue), t('kChase', chase, a.customerCount), 'red'],
+      [t('kCredits'), nok(-a.credits), t('kOverpaid', a.overpaidCount), 'amber'],
+      [t('kLow'), nok(f.lowestClosing.amount), t('kWeek') + ' ' + f.lowestClosing.weekStart, f.lowestClosing.amount < 0 ? 'red' : ''],
+    ].map(([l, v, n, c]) => `<div class="card kpi"><div class="label">${l}</div><div class="value ${c}">${v}</div><div class="note">${n}</div></div>`).join('');
+
+    const total = Object.values(a.buckets).reduce((s, x) => s + x, 0);
+    el('agebar').innerHTML = Object.entries(a.buckets).filter(([, v]) => v > 0).map(([k, v]) => `<div style="flex:${v};background:${BUCKET[k].c}" title="${BUCKET[k][lang]}: ${nok(v)}"></div>`).join('');
+    el('agetable').innerHTML = `<tr><th>${t('thAge')}</th><th class="num">${t('thAmount')}</th></tr>` + Object.entries(a.buckets).map(([k, v]) => `<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BUCKET[k].c};margin-right:.5rem"></span>${BUCKET[k][lang]}</td><td class="num">${nok(v)}</td></tr>`).join('');
+    el('agenote').textContent = t('ageNote', nok(total), nok(a.netOverdue));
+
+    el('chase').innerHTML = `<tr><th>${t('thCustomer')}</th><th class="num">${t('thNet')}</th><th class="num">${t('thOldest')}</th><th>${t('thStep')}</th></tr>` +
+      a.counterparts.filter((c) => c.netOverdue > 0).slice(0, 8).map((c) => { const s = STEP[c.suggestedStep.step]; return `<tr><td>${esc(c.counterpartName)}</td><td class="num">${nok(c.netOverdue)}</td><td class="num">${c.oldestDaysOverdue} ${t('days')}</td><td class="tagcell"><span class="tag ${s.cls}">${s[lang]}</span></td></tr>`; }).join('');
+
+    const rems = lang === 'nb' && r.remediationsNb ? r.remediationsNb : r.remediations;
+    el('revsum').textContent = t('revSum', r.errorCount, r.warningCount, r.year);
+    el('revision').innerHTML = rems.map((m) => {
+      const sev = m.severity === 'error' ? [t('sevError'), 'critical'] : m.severity === 'warning' ? [t('sevWarn'), 'warning'] : [t('sevInfo'), 'info'];
+      const entries = m.proposedEntries.map((e) => `<p><strong>${t('proposal')}: ${esc(e.title)}</strong></p>` + (e.lines.length ? `<div class="scroll"><table><tr><th>${t('thAccount')}</th><th class="num">${t('thAmount')}</th><th>${t('thText')}</th><th>${t('thDate')}</th></tr>${e.lines.map((l) => `<tr><td>${l.accountNumber}</td><td class="num">${nok(l.amount)}</td><td>${esc(l.description)}</td><td>${l.financialDate}</td></tr>`).join('')}</table></div>` : '') + `<p class="muted">${esc(e.caution)}</p>`).join('');
+      const acc = m.finding.accountNumber ? ` (${t('kAcc')} ${m.finding.accountNumber})` : '';
+      return `<details><summary><span class="tag ${sev[1]}">${sev[0]}</span> ${esc(SECTION[m.section]?.[lang] || m.section)}${acc} – ${nok(Math.abs(m.finding.value))}</summary><p>${esc(m.explanation)}</p><p><strong>${t('causes')}</strong></p><ul>${m.likelyCauses.map((c) => `<li>${esc(c)}</li>`).join('')}</ul><p><strong>${t('check')}</strong></p><ul>${m.diagnostics.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>${entries}</details>`;
+    }).join('');
+
+    el('forecast').innerHTML = `<tr><th>${t('fcWeek')}</th><th class="num">${t('fcIn')}</th><th class="num">${t('fcOut')}</th><th class="num">${t('fcFixed')}</th><th class="num">${t('fcBal')}</th></tr>` +
+      f.weeks.map((w) => `<tr><td>${w.weekStart}</td><td class="num">${nok(w.inflowsAR)}</td><td class="num">${nok(w.outflowsAP)}</td><td class="num">${nok(w.outflowsFixed)}</td><td class="num ${w.closing < 0 ? 'red' : ''}">${nok(w.closing)}</td></tr>`).join('');
+    const assume = f.assumptions.map((x) => { if (lang !== 'nb') return x; for (const [re, fn] of ASSUME_NB) { const m = re.exec(x); if (m) return fn(m); } return x; });
+    el('assumptions').querySelector('ul').innerHTML = assume.map((x) => `<li>${esc(x)}</li>`).join('') + `<li>${t('fcExtra')}</li>`;
+
+    const dr = d.reminders.drafts[0];
+    if (dr) el('reminder').innerHTML = `<p><strong>${esc(dr.customer)}</strong>${dr.source === 'ai-generate' ? '' : ` <span class="muted">${t('remTemplate')}</span>`} · ${t('remLine')} ${nok(dr.netOverdue)} · <span class="tag ${STEP[dr.step].cls}">${STEP[dr.step][lang]}</span></p><pre>${esc(dr.text)}</pre>`;
+  }
+  render();
 })();
 </script>
 </body>
