@@ -80,3 +80,4 @@ Implications:
   toChaseCount, useAi reminders via ai-generate, revision tool now includes the two own checks. Waiting on: screenshots
   for docs/img (see docs/img/README.txt), the video, GitHub Pages enablement when the repo goes public.
 - 13 Sept: screenshots via Playwright, NO/EN demo page in Unimicro look, repo public, GitHub Pages live. Left: video link, Slack offline_access reply, form.
+- 14 Sept: offline_access granted on the portal client; REST refresh token stored and verified (no hourly login). Video: intro/outro cut, VO assembled, waiting for the AE render.
